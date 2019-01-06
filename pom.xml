@@ -8,7 +8,7 @@
         <version>2.1.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.surveymoney</groupId>
+    <groupId>com</groupId>
     <artifactId>surveymoney</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>surveymoney</name>
@@ -52,6 +52,7 @@
             <artifactId>spring-restdocs-mockmvc</artifactId>
             <scope>test</scope>
         </dependency>
+ 
     </dependencies>
 
     <build>
