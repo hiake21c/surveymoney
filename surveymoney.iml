@@ -107,5 +107,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.restdocs:spring-restdocs-mockmvc:2.0.2.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: javax.servlet:javax.servlet-api:4.0.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.restdocs:spring-restdocs-core:2.0.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.8" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-collections4:4.2" level="project" />
   </component>
 </module>

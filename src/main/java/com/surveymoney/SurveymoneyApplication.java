@@ -1,4 +1,4 @@
-package com.surveymoney.surveymoney;
+package com.surveymoney;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
