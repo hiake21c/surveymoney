@@ -1,4 +1,4 @@
-package com.surveymoney.surveymoney;
+package com.surveymoney;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
