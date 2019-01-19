@@ -27,7 +27,7 @@ public class SurveyServiceImple implements SurveyService {
      * @return
      */
     @Override
-    public SurveyBase insertSurveyInfo(SurveyBase surveyBase){
+    public Long insertSurveyInfo(SurveyBase surveyBase){
 
         /****************************************************************
          * Question에 셋팅
@@ -91,8 +91,32 @@ public class SurveyServiceImple implements SurveyService {
          ****************************************************************/
         SurveyBase returnBase = surveyBaseRepository.save(surveyBase);
 
-        return surveyBase;
+        return surveyBase.getId();
     }
+
+    /**
+     * 모든 설문 조사 조회
+     * @return
+     */
+    @Override
+    public List<SurveyBase> getSurveyBaseAll(){
+
+        List<SurveyBase> baseList = surveyBaseRepository.findAll();
+        return baseList;
+    }
+
+    /**
+     * 상세 조회
+     * @param id
+     * @return
+     */
+    @Override
+    public SurveyBase getSurveyBase(Long id){
+
+        SurveyBase base = surveyBaseRepository.getOne(id);
+        return base;
+    }
+
 
 
 }

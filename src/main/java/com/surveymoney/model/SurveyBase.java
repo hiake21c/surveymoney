@@ -15,6 +15,7 @@ import java.util.List;
 @Table(name="sv_base")
 @Getter
 @Setter
+@ToString(exclude = "surveyQuestionList")
 public class SurveyBase extends BaseModel{
 
     @Id

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/survey/")
@@ -25,14 +26,40 @@ public class SurveyController {
      * @return
      */
     @PutMapping(name = "putSurvey", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response> putSurveyInfo(@ModelAttribute("survey") SurveyBase  survey){
+    public ResponseEntity<Response> putSurvey(@ModelAttribute("survey") SurveyBase  survey){
 
         Response response = new Response();
-
-        SurveyBase resultObj =  surveyService.insertSurveyInfo(survey);
-
+        Long resultObj =  surveyService.insertSurveyInfo(survey);
         response.putContext("data",resultObj);
 
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Survey 모두 조회
+     * @return
+     */
+    @GetMapping(name = "surveyList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Response> getSurveyList(){
+
+        Response response = new Response();
+        List<SurveyBase> resultObj =  surveyService.getSurveyBaseAll();
+        response.putContext("data",resultObj);
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Survey 상세 조회
+     * @param baseId
+     * @return
+     */
+    @GetMapping(name="surveyDetail", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Response> getSurveyDetail(@RequestParam("baseId") Long baseId){
+
+        Response response = new Response();
+        SurveyBase resultObj =  surveyService.getSurveyBase(baseId);
+        response.putContext("data",resultObj);
         return ResponseEntity.ok(response);
     }
 

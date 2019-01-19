@@ -66,10 +66,28 @@ public class TestsServiceTests {
         }
         surveyBase.setAnswers(surveyAnswerArrayList);
 
-        SurveyBase returnBase = surveyService.insertSurveyInfo(surveyBase);
+        Long returnBase = surveyService.insertSurveyInfo(surveyBase);
 
-        assertNotNull("NOT NULL Exception !!",returnBase.getId());
-        System.out.println("======> Insert Id : "+returnBase.getId());
+        assertNotNull("NOT NULL Exception !!",returnBase);
+        System.out.println("======> Insert Id : "+returnBase);
 
     }
+
+    @Test
+    public void getSurBaseListTest(){
+
+        List<SurveyBase> baseList = surveyService.getSurveyBaseAll();
+        assertNotNull("NOT NULL Exception !!",baseList);
+        System.out.println("======> Insert Id : "+baseList);
+    }
+
+    @Test
+    public void getSurveyBaseInfo(){
+
+        SurveyBase base = surveyService.getSurveyBase(1L);
+        assertNotNull("NOT NULL Exception !!",base);
+        System.out.println("======> Insert Id : "+base);
+    }
+
+
 }
