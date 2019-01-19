@@ -1,16 +1,16 @@
 package com.surveymoney.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.surveymoney.enumulation.QuestionType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name="sv_question")
-@Data
+@Getter
+@Setter
 public class SurveyQuestion extends BaseModel{
 
     @Id
@@ -21,10 +21,14 @@ public class SurveyQuestion extends BaseModel{
     private String questionTitle;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private QuestionType questionType;
 
-    //private SurveyBase surveyBase;
+    @ManyToOne
+    @JoinColumn(name = "sv_base_id")
+    private SurveyBase surveyBase;
 
-    //private List<SurveyAnswer> surveyAnswerList;
+    @OneToMany(mappedBy = "surveyQuestion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<SurveyAnswer> surveyAnswerList;
 
 }

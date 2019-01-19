@@ -1,12 +1,19 @@
 package com.surveymoney.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="sv_answer")
-@Data
+@Getter
+@Setter
 public class SurveyAnswer extends BaseModel {
 
     @Id
@@ -16,9 +23,13 @@ public class SurveyAnswer extends BaseModel {
     @Column(nullable = false)
     private String answerTile;
 
-    private Long answerCount;
+    @Column(columnDefinition="int default 0")
+//    @ColumnDefault("0")
+    private int answerCount;
 
     private String answerCheck;
 
-    //private SurveyQuestion surveyQuestion;
+    @ManyToOne
+    @JoinColumn(name = "sv_question_id")
+    private SurveyQuestion surveyQuestion;
 }
