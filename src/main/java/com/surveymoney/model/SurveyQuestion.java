@@ -31,4 +31,5 @@ public class SurveyQuestion extends BaseModel{
     @OneToMany(mappedBy = "surveyQuestion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<SurveyAnswer> surveyAnswerList;
 
+
 }
