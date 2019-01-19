@@ -24,7 +24,7 @@ public class SurveyController {
      * @param survey
      * @return
      */
-    @PutMapping(name = "surveyInfo", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(name = "putSurvey", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Response> putSurveyInfo(@ModelAttribute("survey") SurveyBase  survey){
 
         Response response = new Response();
