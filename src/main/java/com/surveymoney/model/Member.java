@@ -7,7 +7,8 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "sv_member")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member extends BaseModel{
