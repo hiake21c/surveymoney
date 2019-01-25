@@ -30,6 +30,5 @@ public class SurveyAnswer extends BaseModel {
     private String answerCheck;
 
     @ManyToOne
-    @JoinColumn(name = "sv_question_id")
     private SurveyQuestion surveyQuestion;
 }

@@ -24,4 +24,5 @@ public class SurveyBaseDto {
     @NotNull
     private List<SurveyQuestionDto> Questions;
 
+
 }

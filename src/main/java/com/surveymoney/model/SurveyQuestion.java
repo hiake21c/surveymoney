@@ -25,7 +25,6 @@ public class SurveyQuestion extends BaseModel{
     private QuestionType questionType;
 
     @ManyToOne
-    @JoinColumn(name = "sv_base_id")
     private SurveyBase surveyBase;
 
     @OneToMany(mappedBy = "surveyQuestion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
