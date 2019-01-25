@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class TestsRepositoryTests {
+public class RepositoryTests {
 
     @Autowired
     TestEntityManager testEntityManager;

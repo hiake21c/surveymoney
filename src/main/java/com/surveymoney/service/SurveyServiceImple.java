@@ -2,9 +2,7 @@ package com.surveymoney.service;
 
 import com.surveymoney.enumulation.QuestionType;
 import com.surveymoney.enumulation.SurveyState;
-import com.surveymoney.model.SurveyAnswer;
-import com.surveymoney.model.SurveyBase;
-import com.surveymoney.model.SurveyQuestion;
+import com.surveymoney.model.*;
 import com.surveymoney.repository.SurveyBaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +25,11 @@ public class SurveyServiceImple implements SurveyService {
      * @return
      */
     @Override
-    public Long insertSurveyInfo(SurveyBase surveyBase){
+    public Long insertSurveyInfo(SurveyBaseDto surveyBase){
+
+        SurveyBase base = new SurveyBase();
+        base.setTitle(surveyBase.getTitle());
+        base.setState(surveyBase.getState());
 
         /****************************************************************
          * Question에 셋팅
@@ -36,7 +38,7 @@ public class SurveyServiceImple implements SurveyService {
 
         for(int i=0; i<surveyBase.getQuestions().size(); i++){
             SurveyQuestion surveyQuestion = new SurveyQuestion();
-            SurveyQuestion param = surveyBase.getQuestions().get(i);
+            SurveyQuestionDto param = surveyBase.getQuestions().get(i);
 
             surveyQuestion.setQuestionType(param.getQuestionType());
             surveyQuestion.setQuestionTitle(param.getQuestionTitle());
@@ -48,16 +50,16 @@ public class SurveyServiceImple implements SurveyService {
             /****************************************************************
              * Question에 SurveyBase 참조설정
              ****************************************************************/
-            surveyQuestion.setSurveyBase(surveyBase);
+            surveyQuestion.setSurveyBase(base);
 
             /****************************************************************
              * Answer에 셋팅
              ****************************************************************/
             List<SurveyAnswer> surveyAnswerArrayList = new ArrayList<SurveyAnswer>();
 
-            for(int j=0; j< surveyBase.getAnswers().size(); j++){
+            for(int j=0; j< param.getAnswers().size(); j++){
                 SurveyAnswer surveyAnswer = new  SurveyAnswer();
-                SurveyAnswer answerParam = surveyBase.getAnswers().get(i);
+                SurveyAnswerDto answerParam = param.getAnswers().get(i);
 
                 surveyAnswer.setAnswerTile(answerParam.getAnswerTile());
                 surveyAnswer.setCreateId(1L);
@@ -84,14 +86,14 @@ public class SurveyServiceImple implements SurveyService {
         /****************************************************************
          * Base에 Question목록 set
          ****************************************************************/
-        surveyBase.setSurveyQuestionList(surveyQuestionList);
+        base.setSurveyQuestionList(surveyQuestionList);
 
         /****************************************************************
          * SurveyBase 영속성
          ****************************************************************/
-        SurveyBase returnBase = surveyBaseRepository.save(surveyBase);
+        SurveyBase returnBase = surveyBaseRepository.save(base);
 
-        return surveyBase.getId();
+        return base.getId();
     }
 
     /**
