@@ -35,10 +35,5 @@ public class SurveyBase extends BaseModel{
     @OneToMany(mappedBy = "surveyBase", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<SurveyQuestion> surveyQuestionList;
 
-    @Transient
-    private List<SurveyQuestion> Questions;
-
-    @Transient
-    private List<SurveyAnswer> answers;
 
 }
