@@ -1,6 +1,5 @@
-package com.surveymoney.model;
+package com.surveymoney.tests.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

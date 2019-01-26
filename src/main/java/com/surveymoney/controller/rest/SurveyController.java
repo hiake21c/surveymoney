@@ -34,12 +34,13 @@ public class SurveyController {
         Response response = new Response();
 
         if(result.hasErrors()){
-
+            response.setReturnCode(300);
+            response.setReturnMessage("리터럴이 불일치 합니다.");
         }
 
 
-        Long resultObj =  surveyService.insertSurveyInfo(survey);
-        response.putContext("data",resultObj);
+        //Long resultObj =  surveyService.insertSurveyInfo(survey);
+        //response.putContext("data",resultObj);
 
         return ResponseEntity.ok(response);
     }

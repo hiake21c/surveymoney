@@ -1,4 +1,4 @@
-package com.surveymoney.web;
+package com.surveymoney.surveymoney;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.surveymoney.enumulation.QuestionType;
@@ -7,6 +7,7 @@ import com.surveymoney.model.SurveyAnswerDto;
 import com.surveymoney.model.SurveyBaseDto;
 import com.surveymoney.model.SurveyQuestionDto;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -48,6 +49,7 @@ public class SurveyTestController {
                 .build();
     }
 
+    @Test
     public void postSurvey() throws Exception {
 
         SurveyBaseDto search = new SurveyBaseDto();

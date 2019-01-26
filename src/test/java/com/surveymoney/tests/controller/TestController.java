@@ -1,11 +1,8 @@
-package com.surveymoney.controller.rest;
+package com.surveymoney.tests.controller;
 
-import com.surveymoney.bean.Response;
-import com.surveymoney.model.SurveyBase;
-import com.surveymoney.model.TestDto;
+import com.surveymoney.tests.model.TestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -31,22 +28,17 @@ public class TestController {
 
         return returnStr;
     }
+
     @PostMapping(name = "/test/postTest", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ModelAndView postTest(ModelAndView mav, @RequestBody @Valid TestDto param, BindingResult bindingResult) throws BindException {
 
-        log.debug("=======>1"+param);
-        mav.addObject("param", param);
-        mav.setViewName("testView");
-
         if (bindingResult.hasErrors()) {
-            log.debug("=======>2");
             mav.addObject("errors", bindingResult.getFieldErrors());
-
+            mav.addObject("message","유효하지 않는 값이 존재 합니다.");
             return mav;
         }
-
-        //formService.saveData(param);
-
+        mav.addObject("code",200);
+        mav.addObject("message","success");
         return mav;
     }
 }
