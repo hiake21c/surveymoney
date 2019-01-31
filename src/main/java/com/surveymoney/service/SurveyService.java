@@ -12,4 +12,6 @@ public interface SurveyService  {
     List<SurveyBase> getSurveyBaseAll();
 
     SurveyBase getSurveyBase(Long id);
+
+    void deleteSurveyBase(Long baseId);
 }

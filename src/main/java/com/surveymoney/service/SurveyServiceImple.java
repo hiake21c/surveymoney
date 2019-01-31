@@ -119,6 +119,15 @@ public class SurveyServiceImple implements SurveyService {
         return base;
     }
 
+    /**
+     * 설문조사 삭제
+     * @param baseId
+     */
+    @Override
+    public void deleteSurveyBase(Long baseId) {
+
+        surveyBaseRepository.deleteById(baseId);
+    }
 
 
 }
