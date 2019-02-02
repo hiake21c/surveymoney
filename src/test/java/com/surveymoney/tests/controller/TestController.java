@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 
 @RestController
-//@RequestMapping("/test")
+@RequestMapping("/test")
 @Slf4j
 public class TestController {
 

@@ -16,16 +16,16 @@ import java.util.Date;
 @Setter
 public class BaseModel {
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime modifyDate;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition="999")
     private Long modifyId;
 
-    @Column(nullable = false, updatable=false)
+    @Column(nullable = false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createDate;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition="999")
     private Long createId;
 
 }

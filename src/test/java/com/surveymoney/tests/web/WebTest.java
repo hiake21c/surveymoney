@@ -10,7 +10,9 @@ import com.surveymoney.common.BaseTests;
 import com.surveymoney.tests.model.TestDto;
 import org.junit.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("test")
 public class WebTest extends BaseTests {
 
     @Test
@@ -30,7 +32,7 @@ public class WebTest extends BaseTests {
         paramDto.setName("jjung4684");
         paramDto.setDescription("test입니다.");
 
-        String testDtoJson = objectMapper.writeValueAsString(paramDto);
+        String testDtoJson = mapToJson(paramDto);
 
         this.mockMvc
                 .perform(post("/test/postTest")

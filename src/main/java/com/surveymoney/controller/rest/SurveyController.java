@@ -1,25 +1,23 @@
 package com.surveymoney.controller.rest;
 
 import com.surveymoney.bean.Response;
-import com.surveymoney.enumulation.SurveyState;
 import com.surveymoney.model.SurveyBase;
 import com.surveymoney.model.SurveyBaseDto;
-import com.surveymoney.repository.SurveyBaseRepository;
 import com.surveymoney.service.SurveyService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/survey/")
+//@RequestMapping("/survey/")
+@Slf4j
 public class SurveyController {
 
     @Autowired
@@ -30,27 +28,34 @@ public class SurveyController {
      * @param survey
      * @return
      */
-    @PostMapping(name = "putSurvey", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response> putSurvey(@ModelAttribute @Valid SurveyBaseDto survey, Errors error)throws Exception{
+
+    @PostMapping(name = "/survey/survey", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Response> putSurvey(@RequestBody @Valid SurveyBaseDto survey, Errors error)throws Exception{
 
         Response response = new Response();
 
         if(error.hasErrors()){
             response.setReturnCode(300);
             response.setReturnMessage("필수값이 누락되었습니다.");
+            response.putContext("objectName",error.getFieldError().getObjectName());
+            response.putContext("field",error.getFieldError().getField());
+            response.putContext("errorMessage",error.getFieldError().getDefaultMessage());
+           // response.putContext("error",error.getFieldError());
             return ResponseEntity.ok(response);
         }
 
         try{
 
-            Long resultObj =  surveyService.insertSurveyInfo(survey);
-            if(resultObj == null){
+            Long resultId =  surveyService.insertSurveyInfo(survey);
+            if(resultId == null){
                 response.setReturnCode(600);
                 response.setReturnMessage("등록이 실패 하였습니다.");
+                response.putContext("id",resultId);
             }
         }catch(Exception e){
 
             response.setReturnCode(700);
+            response.putContext("error",e.getMessage());
             response.setReturnMessage("시스템오류 입니다.");
         }
 
@@ -76,21 +81,21 @@ public class SurveyController {
      * @param baseId
      * @return
      */
-    @GetMapping(name="surveyDetail", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response> getSurveyDetail(@RequestParam @NotNull Long baseId, Errors error){
-
-        Response response = new Response();
-
-        if(error.hasErrors()){
-            response.setReturnCode(300);
-            response.setReturnMessage("파라미터가 존재하지 않습니다.");
-            return ResponseEntity.ok(response);
-        }
-
-        SurveyBase resultObj =  surveyService.getSurveyBase(baseId);
-        response.putContext("data",resultObj);
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping(name="surveyDetail", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//    public ResponseEntity<Response> getSurveyDetail(@RequestParam Long baseId){
+//
+//        Response response = new Response();
+//
+////        if(error.hasErrors()){
+////            response.setReturnCode(300);
+////            response.setReturnMessage("파라미터가 존재하지 않습니다.");
+////            return ResponseEntity.ok(response);
+////        }
+//
+//        SurveyBase resultObj =  surveyService.getSurveyBase(baseId);
+//        response.putContext("data",resultObj);
+//        return ResponseEntity.ok(response);
+//    }
 
     /**
      * 설문조사 삭제
