@@ -1,6 +1,8 @@
 package com.surveymoney.surveymoney;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.surveymoney.bean.Response;
+import com.surveymoney.common.BaseTests;
 import com.surveymoney.enumulation.QuestionType;
 import com.surveymoney.enumulation.SurveyState;
 import com.surveymoney.model.SurveyAnswerDto;
@@ -12,9 +14,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -22,35 +26,18 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
-public class SurveyTestController {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    protected ObjectMapper objectMapper;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-    @Autowired
-    private WebApplicationContext ctx;
+public class SurveyTest extends BaseTests {
 
-    @Before
-    public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(ctx)
-                .alwaysDo(print())
-                .build();
-    }
 
     @Test
-    public void postSurvey() throws Exception {
+    public void 설문조사등록() throws Exception {
 
         SurveyBaseDto search = new SurveyBaseDto();
         search.setTitle("Test");
@@ -78,20 +65,25 @@ public class SurveyTestController {
 
         }
         search.setQuestions(questList);
-        String testDtoJson = objectMapper.writeValueAsString(search);
+        String testDtoJson = mapToJson(search);
 
-        mockMvc
-                .perform(post("/test/postTest")
+        MvcResult mvcResult = mockMvc
+                .perform(post("/survey/survey")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(testDtoJson))
-                .andExpect(model().hasNoErrors())
-                .andExpect(model(). attribute("param",search))
-                .andExpect(view().name("testView"))
+                .andDo(print())
                 .andReturn();
 
+        int status = mvcResult.getResponse().getStatus();
+        String content = mvcResult.getResponse().getContentAsString();
+        assertEquals(200, status);
 
+        Response resultDto = mapFromJson(content, Response.class);
+        System.out.println(resultDto.getReturnCode());
 
-
+        int resultCode = resultDto.getReturnCode();
+        assertEquals(200, resultCode);
+        assertTrue(resultDto != null);
 
     }
 
