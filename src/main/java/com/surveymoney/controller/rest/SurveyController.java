@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/survey/")
+@RequestMapping("/survey")
 @Slf4j
 public class SurveyController {
 
@@ -29,8 +29,8 @@ public class SurveyController {
      * @return
      */
 
-    @PostMapping(name = "/survey/survey", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response> putSurvey(@RequestBody @Valid SurveyBaseDto survey, Errors error)throws Exception{
+    @PostMapping(value = "/insertSurvey", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Response> insertSurvey(@RequestBody @Valid SurveyBaseDto survey, Errors error)throws Exception{
 
         Response response = new Response();
 
@@ -50,8 +50,11 @@ public class SurveyController {
             if(resultId == null){
                 response.setReturnCode(600);
                 response.setReturnMessage("등록이 실패 하였습니다.");
-                response.putContext("id",resultId);
+                return ResponseEntity.ok(response);
             }
+
+            response.putContext("id",resultId);
+
         }catch(Exception e){
 
             response.setReturnCode(700);
@@ -66,8 +69,8 @@ public class SurveyController {
      * Survey 모두 조회
      * @return
      */
-    @GetMapping(name = "surveyList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response> getSurveyList(){
+    @GetMapping(value = "/listSurvey", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Response> surveyList(@RequestBody @Valid SurveyBaseDto survey){
 
         Response response = new Response();
         List<SurveyBase> resultObj =  surveyService.getSurveyBaseAll();
@@ -81,21 +84,21 @@ public class SurveyController {
      * @param baseId
      * @return
      */
-//    @GetMapping(name="surveyDetail", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-//    public ResponseEntity<Response> getSurveyDetail(@RequestParam Long baseId){
-//
-//        Response response = new Response();
-//
-////        if(error.hasErrors()){
-////            response.setReturnCode(300);
-////            response.setReturnMessage("파라미터가 존재하지 않습니다.");
-////            return ResponseEntity.ok(response);
-////        }
-//
-//        SurveyBase resultObj =  surveyService.getSurveyBase(baseId);
-//        response.putContext("data",resultObj);
-//        return ResponseEntity.ok(response);
-//    }
+    @GetMapping(value="/detailSurvey", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Response> surveyDetail(@RequestParam Long baseId){
+
+        Response response = new Response();
+
+//        if(error.hasErrors()){
+//            response.setReturnCode(300);
+//            response.setReturnMessage("파라미터가 존재하지 않습니다.");
+//            return ResponseEntity.ok(response);
+//        }
+
+        SurveyBase resultObj =  surveyService.getSurveyBase(baseId);
+        response.putContext("data",resultObj);
+        return ResponseEntity.ok(response);
+    }
 
     /**
      * 설문조사 삭제
@@ -103,7 +106,7 @@ public class SurveyController {
      * @param error
      * @return
      */
-    @DeleteMapping(name="surveyDelete/{baseId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping(value="/deleteSurvey/{baseId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Response> deleteSurvey(@PathVariable @NotNull Long baseId, Errors error)throws Exception{
         Response response = new Response();
 

@@ -1,6 +1,5 @@
 package com.surveymoney.surveymoney;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.surveymoney.bean.Response;
 import com.surveymoney.common.BaseTests;
 import com.surveymoney.enumulation.QuestionType;
@@ -8,20 +7,10 @@ import com.surveymoney.enumulation.SurveyState;
 import com.surveymoney.model.SurveyAnswerDto;
 import com.surveymoney.model.SurveyBaseDto;
 import com.surveymoney.model.SurveyQuestionDto;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +19,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+@ActiveProfiles(inheritProfiles = false)
 public class SurveyTest extends BaseTests {
 
 
@@ -68,10 +58,11 @@ public class SurveyTest extends BaseTests {
         String testDtoJson = mapToJson(search);
 
         MvcResult mvcResult = mockMvc
-                .perform(post("/survey/survey")
+                .perform(post("/survey/insertSurvey")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(testDtoJson))
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andReturn();
 
         int status = mvcResult.getResponse().getStatus();
@@ -83,7 +74,7 @@ public class SurveyTest extends BaseTests {
 
         int resultCode = resultDto.getReturnCode();
         assertEquals(200, resultCode);
-        assertTrue(resultDto != null);
+        assertTrue(resultDto.getContext() != null);
 
     }
 
