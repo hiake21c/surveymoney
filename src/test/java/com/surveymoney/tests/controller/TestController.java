@@ -6,8 +6,6 @@ import com.surveymoney.tests.repository.TestRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,7 +20,7 @@ public class TestController {
     @Autowired
     TestRepository testRepository;
 
-    @GetMapping(name = "/test/getTest")
+    @GetMapping(value = "/getTest")
     public String getTest(@RequestParam String id){
 
         String returnStr = "";
@@ -36,7 +34,7 @@ public class TestController {
         return returnStr;
     }
 
-    @PostMapping(name = "/test/postTest", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/postTest", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ModelAndView postTest(ModelAndView mav, @RequestBody @Valid TestDto param, Errors errors) throws Exception {
 
         if (errors.hasErrors()) {
