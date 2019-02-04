@@ -1,7 +1,5 @@
 package com.surveymoney.service;
 
-import com.surveymoney.enumulation.QuestionType;
-import com.surveymoney.enumulation.SurveyState;
 import com.surveymoney.model.*;
 import com.surveymoney.repository.SurveyBaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,11 @@ public class SurveyServiceImple implements SurveyService {
         SurveyBase base = new SurveyBase();
         base.setTitle(surveyBase.getTitle());
         base.setState(surveyBase.getState());
+        base.setCreateId(1L);
+        base.setCreateDate(LocalDateTime.now());
+        base.setModifyDate(LocalDateTime.now());
+        base.setModifyId(1L);
+
 
         /****************************************************************
          * Question에 셋팅
@@ -91,9 +94,10 @@ public class SurveyServiceImple implements SurveyService {
         /****************************************************************
          * SurveyBase 영속성
          ****************************************************************/
-        SurveyBase returnBase = surveyBaseRepository.save(base);
 
-        return base.getId();
+        SurveyBase resultObj = surveyBaseRepository.save(base);
+
+        return resultObj.getId();
     }
 
     /**
