@@ -1,6 +1,7 @@
 package com.surveymoney.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.surveymoney.enumulation.QuestionType;
 import lombok.*;
 
@@ -11,6 +12,9 @@ import java.util.List;
 @Table(name="sv_question")
 @Getter
 @Setter
+@EqualsAndHashCode(of = "id")
+@AllArgsConstructor
+@NoArgsConstructor
 public class SurveyQuestion extends BaseModel{
 
     @Id
@@ -25,9 +29,11 @@ public class SurveyQuestion extends BaseModel{
     private QuestionType questionType;
 
     @ManyToOne
+    @JsonBackReference
     private SurveyBase surveyBase;
 
     @OneToMany(mappedBy = "surveyQuestion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<SurveyAnswer> surveyAnswerList;
 
 

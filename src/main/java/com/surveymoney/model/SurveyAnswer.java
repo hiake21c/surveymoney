@@ -1,12 +1,7 @@
 package com.surveymoney.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.annotations.ColumnDefault;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -14,6 +9,9 @@ import javax.persistence.*;
 @Table(name="sv_answer")
 @Getter
 @Setter
+@EqualsAndHashCode(of = "id")
+@AllArgsConstructor
+@NoArgsConstructor
 public class SurveyAnswer extends BaseModel {
 
     @Id
@@ -30,5 +28,6 @@ public class SurveyAnswer extends BaseModel {
     private String answerCheck;
 
     @ManyToOne
+    @JsonBackReference
     private SurveyQuestion surveyQuestion;
 }

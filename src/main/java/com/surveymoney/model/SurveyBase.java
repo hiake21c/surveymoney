@@ -1,12 +1,8 @@
 package com.surveymoney.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.surveymoney.enumulation.SurveyState;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,7 +11,9 @@ import java.util.List;
 @Table(name="sv_base")
 @Getter
 @Setter
-@ToString(exclude = "surveyQuestionList")
+@EqualsAndHashCode(of = "id")
+@AllArgsConstructor
+@NoArgsConstructor
 public class SurveyBase extends BaseModel{
 
     @Id
@@ -33,6 +31,7 @@ public class SurveyBase extends BaseModel{
     //FetchType.LAZY : 연결된 도메인을 모두 조회는 안한다. 실행한것만 조회.
     //FetchType.EAGER : 연결된 도메인을 모두 조회 한다. 무한루프가 발생 가능 함.
     @OneToMany(mappedBy = "surveyBase", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<SurveyQuestion> surveyQuestionList;
 
 
