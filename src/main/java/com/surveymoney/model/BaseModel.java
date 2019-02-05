@@ -12,13 +12,13 @@ import java.time.LocalDateTime;
 @Setter
 public class BaseModel {
 
-    @Column(nullable = false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false)
     private LocalDateTime modifyDate;
 
     @Column(nullable = false)
     private Long modifyId;
 
-    @Column(nullable = false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false)
     private LocalDateTime createDate;
 
     @Column(nullable = false)
