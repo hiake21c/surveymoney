@@ -2,6 +2,7 @@ package com.surveymoney.service;
 
 import com.surveymoney.model.*;
 import com.surveymoney.repository.SurveyBaseRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
+@Slf4j
 public class SurveyServiceImple implements SurveyService {
 
     @Autowired
@@ -23,7 +24,8 @@ public class SurveyServiceImple implements SurveyService {
      * @return
      */
     @Override
-    public Long insertSurveyInfo(SurveyBaseDto surveyBase){
+    @Transactional
+    public Long insertSurveyInfo(SurveyBaseDto surveyBase)throws Exception{
 
         SurveyBase base = new SurveyBase();
         base.setTitle(surveyBase.getTitle());
@@ -117,7 +119,8 @@ public class SurveyServiceImple implements SurveyService {
      * @return
      */
     @Override
-    public SurveyBase getSurveyBase(Long id){
+    @Transactional
+    public SurveyBase dtailSurvey(Long id) throws Exception{
 
         SurveyBase base = surveyBaseRepository.getOne(id);
         return base;
