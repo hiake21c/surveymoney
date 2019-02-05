@@ -3,6 +3,8 @@ package com.surveymoney.common;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParseException;
@@ -31,9 +33,8 @@ public class BaseTests {
     @Autowired
     protected WebApplicationContext ctx;
 
-//    protected void setUp() {
-//        mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
-//    }
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     protected String mapToJson(Object obj) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
