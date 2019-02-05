@@ -66,6 +66,30 @@ public class SurveyController {
     }
 
     /**
+     * Survey 상세 조회
+     * @param baseId
+     * @return
+     */
+    @GetMapping(value="/detailSurvey", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Response> surveyDetail(@RequestParam @Valid Long baseId)throws Exception{
+
+        log.debug("====>"+baseId);
+        Response response = new Response();
+
+        try{
+            SurveyBase resultObj =  surveyService.dtailSurvey(baseId);
+            response.putContext("data",resultObj);
+        }catch(Exception e){
+
+            response.setReturnCode(700);
+            response.putContext("error",e.getMessage());
+            response.setReturnMessage("시스템오류 입니다.");
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
      * Survey 모두 조회
      * @return
      */
@@ -76,27 +100,6 @@ public class SurveyController {
         List<SurveyBase> resultObj =  surveyService.getSurveyBaseAll();
         response.putContext("data",resultObj);
 
-        return ResponseEntity.ok(response);
-    }
-
-    /**
-     * Survey 상세 조회
-     * @param baseId
-     * @return
-     */
-    @GetMapping(value="/detailSurvey", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response> surveyDetail(@RequestParam Long baseId){
-
-        Response response = new Response();
-
-//        if(error.hasErrors()){
-//            response.setReturnCode(300);
-//            response.setReturnMessage("파라미터가 존재하지 않습니다.");
-//            return ResponseEntity.ok(response);
-//        }
-
-        SurveyBase resultObj =  surveyService.getSurveyBase(baseId);
-        response.putContext("data",resultObj);
         return ResponseEntity.ok(response);
     }
 

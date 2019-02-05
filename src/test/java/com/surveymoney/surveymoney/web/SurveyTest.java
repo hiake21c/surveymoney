@@ -1,4 +1,4 @@
-package com.surveymoney.surveymoney;
+package com.surveymoney.surveymoney.web;
 
 import com.surveymoney.bean.Response;
 import com.surveymoney.common.BaseTests;
@@ -7,27 +7,33 @@ import com.surveymoney.enumulation.SurveyState;
 import com.surveymoney.model.SurveyAnswerDto;
 import com.surveymoney.model.SurveyBaseDto;
 import com.surveymoney.model.SurveyQuestionDto;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @ActiveProfiles(inheritProfiles = false)
 public class SurveyTest extends BaseTests {
 
 
     @Test
-    public void 설문조사등록() throws Exception {
+    public void survey1_설문조사_등록() throws Exception {
 
         SurveyBaseDto search = new SurveyBaseDto();
         search.setTitle("Test");
@@ -59,7 +65,7 @@ public class SurveyTest extends BaseTests {
 
         MvcResult mvcResult = mockMvc
                 .perform(post("/survey/insertSurvey")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                         .content(testDtoJson))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -74,8 +80,28 @@ public class SurveyTest extends BaseTests {
 
         int resultCode = resultDto.getReturnCode();
         assertEquals(200, resultCode);
-        assertTrue(resultDto.getContext() != null);
+        assertNotNull(resultDto.getContext());
 
     }
 
+    @Test
+    public void survey2_설문조사_상세조회()throws Exception{
+        //mockMvc.perform(get("/findOne/{id}", 1L).accept(MediaType.APPLICATION_JSON))
+        MvcResult mvcResult = mockMvc
+                .perform(get("/survey/detailSurvey")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                                .param("baseId", "1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.baseId",is("1")))
+                .andReturn();
+
+        int status = mvcResult.getResponse().getStatus();
+        String content = mvcResult.getResponse().getContentAsString();
+        assertEquals(200, status);
+
+        Response resultDto = mapFromJson(content, Response.class);
+
+
+    }
 }
