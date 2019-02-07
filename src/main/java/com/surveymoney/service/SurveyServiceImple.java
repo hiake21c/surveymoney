@@ -20,86 +20,72 @@ public class SurveyServiceImple implements SurveyService {
 
     /**
      * 등록
-     * @param surveyBase
+     * @param surveyParam
      * @return
      */
     @Override
     @Transactional
-    public Long insertSurveyInfo(SurveyBaseDto surveyBase)throws Exception{
+    public Long insertSurveyInfo(SurveyBaseDto surveyParam)throws Exception{
 
-        SurveyBase base = new SurveyBase();
-        base.setTitle(surveyBase.getTitle());
-        base.setState(surveyBase.getState());
-        base.setCreateId(1L);
-        base.setCreateDate(LocalDateTime.now());
-        base.setModifyDate(LocalDateTime.now());
-        base.setModifyId(1L);
+        SurveyBase surveyBase = getSurveyBase(surveyParam);
+        List<SurveyQuestion> surveyQuestionList = new ArrayList<>();
 
+        surveyParam.getQuestions().forEach(questParam->{
 
-        /****************************************************************
-         * Question에 셋팅
-         ****************************************************************/
-        List<SurveyQuestion> surveyQuestionList = new ArrayList<SurveyQuestion>();
+            SurveyQuestion surveyQuestion = getSurveyQuestion(questParam);
+            surveyQuestion.setSurveyBase(surveyBase);
 
-        for(int i=0; i<surveyBase.getQuestions().size(); i++){
-            SurveyQuestion surveyQuestion = new SurveyQuestion();
-            SurveyQuestionDto param = surveyBase.getQuestions().get(i);
+            List<SurveyAnswer> surveyAnswerArrayList = new ArrayList<>();
 
-            surveyQuestion.setQuestionType(param.getQuestionType());
-            surveyQuestion.setQuestionTitle(param.getQuestionTitle());
-            surveyQuestion.setCreateId(1L);
-            surveyQuestion.setCreateDate(LocalDateTime.now());
-            surveyQuestion.setModifyDate(LocalDateTime.now());
-            surveyQuestion.setModifyId(1L);
-
-            /****************************************************************
-             * Question에 SurveyBase 참조설정
-             ****************************************************************/
-            surveyQuestion.setSurveyBase(base);
-
-            /****************************************************************
-             * Answer에 셋팅
-             ****************************************************************/
-            List<SurveyAnswer> surveyAnswerArrayList = new ArrayList<SurveyAnswer>();
-
-            for(int j=0; j< param.getAnswers().size(); j++){
-                SurveyAnswer surveyAnswer = new  SurveyAnswer();
-                SurveyAnswerDto answerParam = param.getAnswers().get(i);
-
-                surveyAnswer.setAnswerTile(answerParam.getAnswerTile());
-                surveyAnswer.setCreateId(1L);
-                surveyAnswer.setCreateDate(LocalDateTime.now());
-                surveyAnswer.setModifyDate(LocalDateTime.now());
-                surveyAnswer.setModifyId(1L);
-
-                /****************************************************************
-                 * Answer에 SurveyQuestion 참조설정
-                 ****************************************************************/
+            questParam.getAnswers().forEach(ans->{
+                SurveyAnswer surveyAnswer = getSurveyAnswer(ans);
                 surveyAnswer.setSurveyQuestion(surveyQuestion);
-
                 surveyAnswerArrayList.add(surveyAnswer);
-            }
 
-            /****************************************************************
-             * Question에 SurveyAnswer Set
-             ****************************************************************/
+            });
+
             surveyQuestion.setSurveyAnswerList(surveyAnswerArrayList);
-
             surveyQuestionList.add(surveyQuestion);
-        }
 
-        /****************************************************************
-         * Base에 Question목록 set
-         ****************************************************************/
-        base.setSurveyQuestionList(surveyQuestionList);
+        });
 
-        /****************************************************************
-         * SurveyBase 영속성
-         ****************************************************************/
-
-        SurveyBase resultObj = surveyBaseRepository.save(base);
+        surveyBase.setSurveyQuestionList(surveyQuestionList);
+        SurveyBase resultObj = surveyBaseRepository.save(surveyBase);
 
         return resultObj.getId();
+    }
+
+    private SurveyAnswer getSurveyAnswer(SurveyAnswerDto ans) {
+        SurveyAnswer surveyAnswer = new  SurveyAnswer();
+        surveyAnswer.setAnswerTile(ans.getAnswerTile());
+        surveyAnswer.setCreateId(1L);
+        surveyAnswer.setCreateDate(LocalDateTime.now());
+        surveyAnswer.setModifyDate(LocalDateTime.now());
+        surveyAnswer.setModifyId(1L);
+        return surveyAnswer;
+    }
+
+    private SurveyQuestion getSurveyQuestion(SurveyQuestionDto questParam) {
+        SurveyQuestion surveyQuestion = new SurveyQuestion();
+
+        surveyQuestion.setQuestionType(questParam.getQuestionType());
+        surveyQuestion.setQuestionTitle(questParam.getQuestionTitle());
+        surveyQuestion.setCreateId(1L);
+        surveyQuestion.setCreateDate(LocalDateTime.now());
+        surveyQuestion.setModifyDate(LocalDateTime.now());
+        surveyQuestion.setModifyId(1L);
+        return surveyQuestion;
+    }
+
+    private SurveyBase getSurveyBase(SurveyBaseDto surveyParam) {
+        SurveyBase surveyBase = new SurveyBase();
+        surveyBase.setTitle(surveyParam.getTitle());
+        surveyBase.setState(surveyParam.getState());
+        surveyBase.setCreateId(1L);
+        surveyBase.setCreateDate(LocalDateTime.now());
+        surveyBase.setModifyDate(LocalDateTime.now());
+        surveyBase.setModifyId(1L);
+        return surveyBase;
     }
 
     /**
