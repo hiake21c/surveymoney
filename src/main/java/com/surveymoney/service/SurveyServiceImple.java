@@ -25,7 +25,7 @@ public class SurveyServiceImple implements SurveyService {
      */
     @Override
     @Transactional
-    public Long insertSurveyInfo(SurveyBaseDto surveyParam)throws Exception{
+    public Long surveyRegister(SurveyBaseDto surveyParam){
 
         SurveyBase surveyBase = getSurveyBase(surveyParam);
         List<SurveyQuestion> surveyQuestionList = new ArrayList<>();
@@ -89,28 +89,30 @@ public class SurveyServiceImple implements SurveyService {
     }
 
     /**
-     * 모든 설문 조사 조회
-     * @return
-     */
-    @Override
-    public List<SurveyBase> getSurveyBaseAll(){
-
-        List<SurveyBase> baseList = surveyBaseRepository.findAll();
-        return baseList;
-    }
-
-    /**
      * 상세 조회
      * @param id
      * @return
      */
     @Override
     @Transactional
-    public SurveyBase dtailSurvey(Long id) throws Exception{
+    public SurveyBase surveyDetail(Long id){
 
         SurveyBase base = surveyBaseRepository.getOne(id);
         return base;
     }
+
+    /**
+     * 모든 설문 조사 조회
+     * @return
+     */
+    @Override
+    public List<SurveyBase> surveyAllList(){
+
+        List<SurveyBase> baseList = surveyBaseRepository.findAll();
+        return baseList;
+    }
+
+
 
     /**
      * 설문조사 삭제
