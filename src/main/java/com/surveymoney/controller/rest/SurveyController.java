@@ -12,8 +12,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @RestController
 @RequestMapping("/survey")
@@ -22,6 +20,8 @@ public class SurveyController {
 
     @Autowired
     SurveyService surveyService;
+
+
 
     /**
      * Survey 등록
@@ -73,12 +73,20 @@ public class SurveyController {
     @GetMapping(value="/detailSurvey", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Response> surveyDetail(@RequestParam @Valid Long baseId)throws Exception{
 
-        log.debug("====>"+baseId);
         Response response = new Response();
 
+        if(baseId ==null){
+            response.setReturnCode(300);
+            response.setReturnMessage("파라미터가 누락되었습니다.");
+            return ResponseEntity.ok(response);
+        }
+
         try{
+
             SurveyBase resultObj =  surveyService.dtailSurvey(baseId);
             response.putContext("data",resultObj);
+            response.putContext("resultId",resultObj.getId());
+
         }catch(Exception e){
 
             response.setReturnCode(700);
@@ -89,45 +97,7 @@ public class SurveyController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Survey 모두 조회
-     * @return
-     */
-    @GetMapping(value = "/listSurvey", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response> surveyList(@RequestBody @Valid SurveyBaseDto survey){
 
-        Response response = new Response();
-        List<SurveyBase> resultObj =  surveyService.getSurveyBaseAll();
-        response.putContext("data",resultObj);
-
-        return ResponseEntity.ok(response);
-    }
-
-    /**
-     * 설문조사 삭제
-     * @param baseId
-     * @param error
-     * @return
-     */
-    @DeleteMapping(value="/deleteSurvey/{baseId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response> deleteSurvey(@PathVariable @NotNull Long baseId, Errors error)throws Exception{
-        Response response = new Response();
-
-        if(error.hasErrors()){
-            response.setReturnCode(300);
-            response.setReturnMessage("파라미터가 존재하지 않습니다.");
-            return ResponseEntity.ok(response);
-        }
-
-        try{
-            surveyService.deleteSurveyBase(baseId);
-        }catch(Exception e){
-            response.setReturnCode(700);
-            response.setReturnMessage("시스템오류 입니다.");
-        }
-
-        return ResponseEntity.ok(response);
-    }
 
 
 }
