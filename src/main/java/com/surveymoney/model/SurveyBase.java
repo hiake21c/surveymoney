@@ -1,5 +1,6 @@
 package com.surveymoney.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.surveymoney.enumulation.SurveyState;
 import lombok.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SurveyBase extends BaseModel{
 
     @Id
