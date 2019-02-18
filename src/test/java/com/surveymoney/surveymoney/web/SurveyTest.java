@@ -20,10 +20,8 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,13 +35,34 @@ public class SurveyTest extends BaseTests {
 
     @Test
     @TestDscription(description = "설문조사를 신규 등록한다.")
-    public void insertSurvey() throws Exception {
+    public void surveyRegister() throws Exception {
 
-        SurveyBaseDto search = new SurveyBaseDto();
-        search.setTitle("Test");
-        search.setState(SurveyState.OPEN);
+        String testDtoJson = mapToJson(getSurveyBaseDto());
 
-        List<SurveyQuestionDto> questList = new ArrayList<SurveyQuestionDto>();
+        MockHttpServletResponse mvcResult = mockMvc
+                .perform(post("/survey/surveyRegister")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .content(testDtoJson))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.returnMessage").value("success"))
+                .andExpect(jsonPath("$.returnCode").value("200"))
+                .andReturn().getResponse();
+
+        String content = mvcResult.getContentAsString();
+        Response resultDto = mapFromJson(content, Response.class);
+
+        assertThat(resultDto.getContext(), is(notNullValue()));
+
+    }
+
+    private SurveyBaseDto getSurveyBaseDto() {
+        SurveyBaseDto surveySearch = new SurveyBaseDto();
+        surveySearch.setTitle("Test");
+        surveySearch.setState(SurveyState.OPEN);
+
+        List<SurveyQuestionDto> questList = new ArrayList<>();
 
         IntStream.range(0,2).forEach(i->{
             SurveyQuestionDto questionDto = new SurveyQuestionDto();
@@ -70,33 +89,16 @@ public class SurveyTest extends BaseTests {
             questList.add(questionDto);
         });
 
-        search.setQuestions(questList);
-        String testDtoJson = mapToJson(search);
-
-        MockHttpServletResponse mvcResult = mockMvc
-                .perform(post("/survey/insertSurvey")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                        .content(testDtoJson))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(status().is(200))
-                .andExpect(jsonPath("$.returnMessage").value("success"))
-                .andExpect(jsonPath("$.returnCode").value("200"))
-                .andReturn().getResponse();
-
-        String content = mvcResult.getContentAsString();
-        Response resultDto = mapFromJson(content, Response.class);
-
-        assertNotNull(resultDto.getContext());
-
+        surveySearch.setQuestions(questList);
+        return surveySearch;
     }
 
     @Test
     @TestDscription(description = "설문조사 상세조회를 한다.")
-    public void detailSurvey()throws Exception{
+    public void surveyDetail()throws Exception{
         //mockMvc.perform(get("/findOne/{id}", 1L).accept(MediaType.APPLICATION_JSON))
         MockHttpServletResponse mvcResult = mockMvc
-                .perform(get("/survey/detailSurvey")
+                .perform(get("/survey/surveyDetail")
                         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                                 .param("baseId", "1"))
                 .andDo(print())
@@ -111,6 +113,44 @@ public class SurveyTest extends BaseTests {
 
         assertThat(resultDto.getContext().get("data"), is(notNullValue()));
         assertThat(resultDto.getContext().get("resultId"), is(equalTo(1)));
+
+    }
+
+    @Test
+    @TestDscription(description = "설문조사 목록을 조회 한다.")
+    public void surveyAllList()throws Exception{
+        MockHttpServletResponse mvcResult = mockMvc
+                .perform(get("/survey/surveyList")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .param("baseId", "1")
+                        )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.returnCode").value("200"))
+                .andReturn().getResponse();
+
+        String content = mvcResult.getContentAsString();
+        Response resultDto = mapFromJson(content, Response.class);
+
+        assertThat(resultDto.getContext().get("data"), is(notNullValue()));
+    }
+
+    @Test
+    @TestDscription(description = "설문조사를 삭제 한다.")
+    public void surveyDelete() throws Exception{
+        MockHttpServletResponse mvcResult = mockMvc
+                .perform(delete("/survey/surveyDelete")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .param("baseId", "1")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.returnCode").value("200"))
+                .andReturn().getResponse();
+
+        String content = mvcResult.getContentAsString();
 
     }
 

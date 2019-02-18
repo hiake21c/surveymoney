@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface SurveyService  {
 
-    Long insertSurveyInfo(SurveyBaseDto surveyBase)throws Exception;
+    Long surveyRegister(SurveyBaseDto surveyBase);
 
-    List<SurveyBase> getSurveyBaseAll();
+    SurveyBase surveyDetail(Long id);
 
-    SurveyBase dtailSurvey(Long id) throws Exception;
+    List<SurveyBase> surveyAllList();
 
     void deleteSurveyBase(Long baseId);
 }
