@@ -21,8 +21,7 @@ import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -123,7 +122,7 @@ public class SurveyTest extends BaseTests {
         MockHttpServletResponse mvcResult = mockMvc
                 .perform(get("/survey/surveyList")
                         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                        //.param("baseId", "1")
+                        .param("baseId", "1")
                         )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -134,9 +133,26 @@ public class SurveyTest extends BaseTests {
         String content = mvcResult.getContentAsString();
         Response resultDto = mapFromJson(content, Response.class);
 
-        //assertThat(resultDto.getContext().get("data"), is(notNullValue()));
+        assertThat(resultDto.getContext().get("data"), is(notNullValue()));
     }
 
+    @Test
+    @TestDscription(description = "설문조사를 삭제 한다.")
+    public void surveyDelete() throws Exception{
+        MockHttpServletResponse mvcResult = mockMvc
+                .perform(delete("/survey/surveyDelete")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .param("baseId", "1")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.returnCode").value("200"))
+                .andReturn().getResponse();
+
+        String content = mvcResult.getContentAsString();
+
+    }
 
 
 

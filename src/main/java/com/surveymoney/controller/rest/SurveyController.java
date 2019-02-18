@@ -117,6 +117,35 @@ public class SurveyController {
 
     }
 
+    /**
+     * 설문조사를 삭제한다.
+     * @param baseId
+     * @return
+     */
+    @DeleteMapping(value="/surveyDelete", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Response> surveyDelete(@RequestParam @Valid Long baseId){
+        Response response = new Response();
+
+        if(baseId ==null){
+            response.setReturnCode(300);
+            response.setReturnMessage("파라미터가 누락되었습니다.");
+            return ResponseEntity.ok(response);
+        }
+
+        try{
+
+
+
+        }catch(Exception e){
+
+            response.setReturnCode(700);
+            response.putContext("error",e.getMessage());
+            response.setReturnMessage("시스템오류 입니다.");
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
 
 
 
