@@ -133,8 +133,7 @@ public class SurveyController {
         }
 
         try{
-
-
+            surveyService.deleteSurveyBase(baseId);
 
         }catch(Exception e){
 
