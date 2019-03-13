@@ -117,10 +117,26 @@ public class SurveyTest extends BaseTests {
     }
 
     @Test
-    @TestDscription(description = "설문조사를 삭제 한다.")
-    public void surveyDelete() throws Exception{
+    @TestDscription(description = "설문조사 질문을 삭제한다.")
+    public void surveyQuestionDelete() throws Exception{
         MockHttpServletResponse mvcResult = mockMvc
-                .perform(delete("/survey/surveyDelete")
+                .perform(delete("/survey/questionDelete/1")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .param("qstId", "1")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.returnMessage").value("success"))
+                .andExpect(jsonPath("$.returnCode").value("200"))
+                .andReturn().getResponse();
+    }
+
+    @Test
+    @TestDscription(description = "기본 설문조사를 삭제 한다.")
+    public void surveyBaseDelete() throws Exception{
+        MockHttpServletResponse mvcResult = mockMvc
+                .perform(delete("/survey/baseDelete")
                         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                         .param("baseId", "1")
                 )
@@ -153,6 +169,7 @@ public class SurveyTest extends BaseTests {
 
         //assertThat(resultDto.getContext().get("data"), is(notNullValue()));
     }
+
 
 
 }
