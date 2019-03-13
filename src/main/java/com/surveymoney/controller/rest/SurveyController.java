@@ -122,13 +122,13 @@ public class SurveyController {
      * @param baseId
      * @return
      */
-    @DeleteMapping(value="/surveyDelete", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response> surveyDelete(@RequestParam @Valid Long baseId){
+    @DeleteMapping(value="/baseDelete", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Response> baseDelete(@RequestParam @Valid Long baseId){
         Response response = new Response();
 
         if(baseId ==null){
             response.setReturnCode(300);
-            response.setReturnMessage("파라미터가 누락되었습니다.");
+            response.setReturnMessage("파라미터 누락되었습니다.");
             return ResponseEntity.ok(response);
         }
 
@@ -140,6 +140,31 @@ public class SurveyController {
             response.setReturnCode(700);
             response.putContext("error",e.getMessage());
             response.setReturnMessage("시스템오류 입니다.");
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 질문을 삭제한다.
+     * @param baseId
+     * @param qstId
+     * @return
+     */
+    @DeleteMapping(value = "/questionDelete/{baseId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Response> questionDelete(@PathVariable@Valid Long baseId, @RequestParam @Valid Long qstId){
+        Response response = new Response();
+
+        if(baseId == null){
+            response.setReturnCode(300);
+            response.setReturnMessage("설문조사 ID가 누락되었습니다.");
+            return ResponseEntity.ok(response);
+        }
+
+        if(qstId == null){
+            response.setReturnCode(300);
+            response.setReturnMessage("질문 ID가 누락되었습니다.");
+            return ResponseEntity.ok(response);
         }
 
         return ResponseEntity.ok(response);
