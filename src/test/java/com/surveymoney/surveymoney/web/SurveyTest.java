@@ -6,6 +6,7 @@ import com.surveymoney.common.TestDscription;
 import com.surveymoney.enumulation.QuestionType;
 import com.surveymoney.enumulation.SurveyState;
 import com.surveymoney.model.SurveyAnswerDto;
+import com.surveymoney.model.SurveyBase;
 import com.surveymoney.model.SurveyBaseDto;
 import com.surveymoney.model.SurveyQuestionDto;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @FixMethodOrder(MethodSorters.JVM)
-//@ActiveProfiles(inheritProfiles = false)
 @Slf4j
 public class SurveyTest extends BaseTests {
 
@@ -94,6 +94,26 @@ public class SurveyTest extends BaseTests {
     }
 
     @Test
+    @TestDscription(description = "설문조사 목록을 조회 한다.")
+    public void surveyAllList()throws Exception{
+        MockHttpServletResponse mvcResult = mockMvc
+                .perform(get("/survey/surveyList")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .param("baseId", "1")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.returnCode").value("200"))
+                .andReturn().getResponse();
+
+        String content = mvcResult.getContentAsString();
+        Response resultDto = mapFromJson(content, Response.class);
+
+        //assertThat(resultDto.getContext().get("data"), is(notNullValue()));
+    }
+
+    @Test
     @TestDscription(description = "설문조사 상세조회를 한다.")
     public void surveyDetail()throws Exception{
         //mockMvc.perform(get("/findOne/{id}", 1L).accept(MediaType.APPLICATION_JSON))
@@ -130,6 +150,11 @@ public class SurveyTest extends BaseTests {
                 .andExpect(jsonPath("$.returnMessage").value("success"))
                 .andExpect(jsonPath("$.returnCode").value("200"))
                 .andReturn().getResponse();
+        String content = mvcResult.getContentAsString();
+        Response resultDto = mapFromJson(content, Response.class);
+
+        assertThat(resultDto.getContext().get("data"), is(notNullValue()));
+
     }
 
     @Test
@@ -150,25 +175,7 @@ public class SurveyTest extends BaseTests {
 
     }
 
-    @Test
-    @TestDscription(description = "설문조사 목록을 조회 한다.")
-    public void surveyAllList()throws Exception{
-        MockHttpServletResponse mvcResult = mockMvc
-                .perform(get("/survey/surveyList")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                        .param("baseId", "1")
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(status().is(200))
-                .andExpect(jsonPath("$.returnCode").value("200"))
-                .andReturn().getResponse();
 
-        String content = mvcResult.getContentAsString();
-        Response resultDto = mapFromJson(content, Response.class);
-
-        //assertThat(resultDto.getContext().get("data"), is(notNullValue()));
-    }
 
 
 

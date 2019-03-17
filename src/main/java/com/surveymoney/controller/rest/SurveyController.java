@@ -3,6 +3,7 @@ package com.surveymoney.controller.rest;
 import com.surveymoney.bean.Response;
 import com.surveymoney.model.SurveyBase;
 import com.surveymoney.model.SurveyBaseDto;
+import com.surveymoney.model.SurveyQuestion;
 import com.surveymoney.service.SurveyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,7 @@ public class SurveyController {
      * @return Response
      */
     @GetMapping(value="/surveyDetail", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response> surveyDetail(@RequestParam @Valid Long baseId){
+    public ResponseEntity<Response> getSurveyDetail(@RequestParam @Valid Long baseId){
 
         Response response = new Response();
 
@@ -103,7 +104,7 @@ public class SurveyController {
      * @return Response
      */
     @GetMapping(value = "/surveyList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public  ResponseEntity<Response> surveyList(){
+    public  ResponseEntity<Response> getSurveyList(){
         Response response = new Response();
 
         List<SurveyBase> resultList = surveyService.surveyAllList();
@@ -123,7 +124,7 @@ public class SurveyController {
      * @return
      */
     @DeleteMapping(value="/baseDelete", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response> baseDelete(@RequestParam @Valid Long baseId){
+    public ResponseEntity<Response> deleteBase(@RequestParam @Valid Long baseId){
         Response response = new Response();
 
         if(baseId ==null){
@@ -152,7 +153,7 @@ public class SurveyController {
      * @return
      */
     @DeleteMapping(value = "/questionDelete/{baseId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response> questionDelete(@PathVariable@Valid Long baseId, @RequestParam @Valid Long qstId){
+    public ResponseEntity<Response> deleteQuestion(@PathVariable@Valid Long baseId, @RequestParam @Valid Long qstId){
         Response response = new Response();
 
         if(baseId == null){
@@ -165,6 +166,15 @@ public class SurveyController {
             response.setReturnCode(300);
             response.setReturnMessage("질문 ID가 누락되었습니다.");
             return ResponseEntity.ok(response);
+        }
+
+        try{
+            List<SurveyQuestion> result =  surveyService.deleteQuestion(baseId, qstId);
+            response.putContext("data",result);
+        }catch (Exception e){
+            response.setReturnCode(700);
+            response.putContext("error",e.getMessage());
+            response.setReturnMessage("시스템오류 입니다.");
         }
 
         return ResponseEntity.ok(response);

@@ -1,7 +1,9 @@
 package com.surveymoney.service;
 
 import com.surveymoney.model.*;
+import com.surveymoney.repository.SurveyAnswerRepository;
 import com.surveymoney.repository.SurveyBaseRepository;
+import com.surveymoney.repository.SurveyQuestionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,12 @@ public class SurveyServiceImple implements SurveyService {
 
     @Autowired
     SurveyBaseRepository surveyBaseRepository;
+
+    @Autowired
+    SurveyQuestionRepository surveyQuestionRepository;
+
+    @Autowired
+    SurveyAnswerRepository surveyAnswerRepository;
 
     /**
      * 등록
@@ -112,8 +120,6 @@ public class SurveyServiceImple implements SurveyService {
         return baseList;
     }
 
-
-
     /**
      * 설문조사 삭제
      * @param baseId
@@ -122,6 +128,22 @@ public class SurveyServiceImple implements SurveyService {
     public void deleteSurveyBase(Long baseId) {
 
         surveyBaseRepository.deleteById(baseId);
+    }
+
+    @Override
+    public List<SurveyQuestion> deleteQuestion(Long baseId, Long qstId) {
+        SurveyBase surveyBase = surveyBaseRepository.getOne(baseId);
+
+        List<SurveyQuestion> surveyQuestionList = new ArrayList<>();
+        surveyBase.getSurveyQuestionList().forEach(question->{
+            SurveyQuestion surveyQuestion = surveyQuestionRepository.getOne(qstId);
+
+            if(surveyQuestion != null){
+            }
+
+        });
+        return surveyBase.getSurveyQuestionList();
+
     }
 
 
