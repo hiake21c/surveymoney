@@ -87,7 +87,6 @@ public class SurveyController {
 
             SurveyBase resultObj =  surveyService.surveyDetail(baseId);
             response.putContext("data",resultObj);
-            response.putContext("resultId",resultObj.getId());
 
         }catch(Exception e){
 

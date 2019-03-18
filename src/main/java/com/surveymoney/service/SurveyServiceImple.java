@@ -35,37 +35,43 @@ public class SurveyServiceImple implements SurveyService {
     @Transactional
     public Long surveyRegister(SurveyBaseDto surveyParam){
 
-        SurveyBase surveyBase = getSurveyBase(surveyParam);
+        SurveyBase surveyBase = setSurveyBase(surveyParam);
         List<SurveyQuestion> surveyQuestionList = new ArrayList<>();
 
-        surveyParam.getQuestions().forEach(questParam->{
+        if(surveyParam.getQuestions() != null){
+            surveyParam.getQuestions().forEach(questParam->{
 
-            SurveyQuestion surveyQuestion = getSurveyQuestion(questParam);
-            surveyQuestion.setSurveyBase(surveyBase);
+                SurveyQuestion surveyQuestion = setSurveyQuestion(questParam);
+                surveyQuestion.setSurveyBase(surveyBase);
 
-            List<SurveyAnswer> surveyAnswerArrayList = new ArrayList<>();
+                if(questParam.getAnswers() != null){
+                    List<SurveyAnswer> surveyAnswerArrayList = new ArrayList<>();
 
-            questParam.getAnswers().forEach(ans->{
-                SurveyAnswer surveyAnswer = getSurveyAnswer(ans);
-                surveyAnswer.setSurveyQuestion(surveyQuestion);
-                surveyAnswerArrayList.add(surveyAnswer);
+                    questParam.getAnswers().forEach(ans->{
+                        SurveyAnswer surveyAnswer = setSurveyAnswer(ans);
+                        surveyAnswer.setSurveyQuestion(surveyQuestion);
+                        surveyAnswerArrayList.add(surveyAnswer);
+                    });
+
+                    surveyQuestion.setSurveyAnswerList(surveyAnswerArrayList);
+                }
+
+                surveyQuestionList.add(surveyQuestion);
 
             });
+            surveyBase.setSurveyQuestionList(surveyQuestionList);
+        }
 
-            surveyQuestion.setSurveyAnswerList(surveyAnswerArrayList);
-            surveyQuestionList.add(surveyQuestion);
-
-        });
-
-        surveyBase.setSurveyQuestionList(surveyQuestionList);
         SurveyBase resultObj = surveyBaseRepository.save(surveyBase);
 
         return resultObj.getId();
     }
 
-    private SurveyAnswer getSurveyAnswer(SurveyAnswerDto ans) {
+    private SurveyAnswer setSurveyAnswer(SurveyAnswerDto ans) {
         SurveyAnswer surveyAnswer = new  SurveyAnswer();
-        surveyAnswer.setAnswerTile(ans.getAnswerTile());
+        surveyAnswer.setAnswerContent(ans.getAnswerContent());
+        surveyAnswer.setDisplayYn(ans.getDisplayYn());
+        surveyAnswer.setUseYn(ans.getUseYn());
         surveyAnswer.setCreateId(1L);
         surveyAnswer.setCreateDate(LocalDateTime.now());
         surveyAnswer.setModifyDate(LocalDateTime.now());
@@ -73,11 +79,13 @@ public class SurveyServiceImple implements SurveyService {
         return surveyAnswer;
     }
 
-    private SurveyQuestion getSurveyQuestion(SurveyQuestionDto questParam) {
+    private SurveyQuestion setSurveyQuestion(SurveyQuestionDto questParam) {
         SurveyQuestion surveyQuestion = new SurveyQuestion();
 
         surveyQuestion.setQuestionType(questParam.getQuestionType());
         surveyQuestion.setQuestionTitle(questParam.getQuestionTitle());
+        surveyQuestion.setDisplayYn(questParam.getDisplayYn());
+        surveyQuestion.setUseYn(questParam.getUseYn());
         surveyQuestion.setCreateId(1L);
         surveyQuestion.setCreateDate(LocalDateTime.now());
         surveyQuestion.setModifyDate(LocalDateTime.now());
@@ -85,10 +93,12 @@ public class SurveyServiceImple implements SurveyService {
         return surveyQuestion;
     }
 
-    private SurveyBase getSurveyBase(SurveyBaseDto surveyParam) {
+    private SurveyBase setSurveyBase(SurveyBaseDto surveyParam) {
         SurveyBase surveyBase = new SurveyBase();
         surveyBase.setTitle(surveyParam.getTitle());
-        surveyBase.setState(surveyParam.getState());
+        surveyBase.setStateType(surveyParam.getStateType());
+        surveyBase.setDisplayYn(surveyParam.getDisplayYn());
+        surveyBase.setUseYn(surveyParam.getUseYn());
         surveyBase.setCreateId(1L);
         surveyBase.setCreateDate(LocalDateTime.now());
         surveyBase.setModifyDate(LocalDateTime.now());
