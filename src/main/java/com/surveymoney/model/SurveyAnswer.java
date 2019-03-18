@@ -1,9 +1,13 @@
 package com.surveymoney.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.surveymoney.enumulation.AnswerShapeType;
+import com.surveymoney.enumulation.YesNoType;
 import lombok.*;
 
 import javax.persistence.*;
+
+import static com.surveymoney.enumulation.YesNoType.*;
 
 @Entity
 @Table(name="sv_answer")
@@ -19,13 +23,27 @@ public class SurveyAnswer extends BaseModel {
     private Long id;
 
     @Column(nullable = false)
-    private String answerTile;
+    private String answerContent;
 
     @Column(columnDefinition="int default 0")
 //    @ColumnDefault("0")
     private int answerCount;
 
     private String answerCheck;
+
+    @Enumerated(EnumType.STRING)
+    private AnswerShapeType shapeType;
+
+    private  int scale;
+
+
+    @Column(nullable = false, columnDefinition ="Y")
+    @Enumerated(EnumType.STRING)
+    private YesNoType useYn;
+
+    @Column(nullable = false, columnDefinition ="Y")
+    @Enumerated(EnumType.STRING)
+    private YesNoType displayYn;
 
     @ManyToOne
     @JsonBackReference

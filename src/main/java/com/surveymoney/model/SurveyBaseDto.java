@@ -1,6 +1,7 @@
 package com.surveymoney.model;
 
 import com.surveymoney.enumulation.SurveyState;
+import com.surveymoney.enumulation.YesNoType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.lang.NonNull;
@@ -21,7 +22,11 @@ public class SurveyBaseDto {
     private String title;
 
     @NotNull
-    private SurveyState state;
+    private SurveyState stateType;
+
+    private YesNoType useYn;
+
+    private YesNoType displayYn;
 
     private List<SurveyQuestionDto> Questions;
 
