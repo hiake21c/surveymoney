@@ -65,46 +65,50 @@ public class SurveyTest extends BaseTests {
         surveySearch.setStateType(SurveyState.OPEN);
         surveySearch.setDisplayYn(YesNoType.Y);
         surveySearch.setUseYn(YesNoType.Y);
-        List<SurveyQuestionDto> questList = setQuestionDto(surveySearch);
+        List<SurveyQuestionDto> questList = setQuestionDto();
         surveySearch.setQuestions(questList);
         return surveySearch;
     }
 
-    private List<SurveyQuestionDto> setQuestionDto(SurveyBaseDto surveySearch) {
+    private List<SurveyQuestionDto> setQuestionDto() {
         List<SurveyQuestionDto> questList = new ArrayList<>();
 
         IntStream.range(0,2).forEach(i->{
             SurveyQuestionDto questionDto = new SurveyQuestionDto();
             questionDto.setDisplayYn(YesNoType.Y);
             questionDto.setUseYn(YesNoType.Y);
+            questionDto.setQuestionType(QuestionType.SINGLE_CHOICE);
 
             if(i == 0){
                 questionDto.setQuestionTitle("test가 쉽습니까?");
             }else{
                 questionDto.setQuestionTitle("test가 어렵습니까?");
             }
-            questionDto.setQuestionType(QuestionType.SINGLE_CHOICE);
 
-            List<SurveyAnswerDto> answerList = new ArrayList<>();
-                IntStream.range(0,2).forEach(j->{
-                    SurveyAnswerDto answerDto = new SurveyAnswerDto();
-                    answerDto.setDisplayYn(YesNoType.Y);
-                    answerDto.setUseYn(YesNoType.Y);
-
-                    if(j == 0){
-                        answerDto.setAnswerContent("YES");
-                    }else{
-                        answerDto.setAnswerContent("NO");
-                    }
-                    answerList.add(answerDto);
-                });
+            List<SurveyAnswerDto> answerList = setSurveyAnswer();
 
             questionDto.setAnswers(answerList);
             questList.add(questionDto);
         });
 
-
         return questList;
+    }
+
+    private List<SurveyAnswerDto> setSurveyAnswer() {
+        List<SurveyAnswerDto> answerList = new ArrayList<>();
+        IntStream.range(0,2).forEach(j->{
+            SurveyAnswerDto answerDto = new SurveyAnswerDto();
+            answerDto.setDisplayYn(YesNoType.Y);
+            answerDto.setUseYn(YesNoType.Y);
+
+            if(j == 0){
+                answerDto.setAnswerContent("YES");
+            }else{
+                answerDto.setAnswerContent("NO");
+            }
+            answerList.add(answerDto);
+        });
+        return answerList;
     }
 
     @Test
