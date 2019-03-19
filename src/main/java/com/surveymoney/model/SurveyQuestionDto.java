@@ -1,6 +1,7 @@
 package com.surveymoney.model;
 
 import com.surveymoney.enumulation.QuestionType;
+import com.surveymoney.enumulation.YesNoType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +20,10 @@ public class SurveyQuestionDto {
 
     @NotNull
     private QuestionType questionType;
+
+    private YesNoType useYn;
+
+    private YesNoType displayYn;
 
     @NotNull
     private List<SurveyAnswerDto> answers;

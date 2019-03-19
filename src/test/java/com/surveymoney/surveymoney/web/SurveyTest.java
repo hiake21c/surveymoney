@@ -5,14 +5,18 @@ import com.surveymoney.common.BaseTests;
 import com.surveymoney.common.TestDscription;
 import com.surveymoney.enumulation.QuestionType;
 import com.surveymoney.enumulation.SurveyState;
+import com.surveymoney.enumulation.YesNoType;
 import com.surveymoney.model.SurveyAnswerDto;
 import com.surveymoney.model.SurveyBase;
 import com.surveymoney.model.SurveyBaseDto;
 import com.surveymoney.model.SurveyQuestionDto;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.skyscreamer.jsonassert.JSONParser;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -31,13 +35,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 public class SurveyTest extends BaseTests {
 
-
-
     @Test
     @TestDscription(description = "설문조사를 신규 등록한다.")
     public void surveyRegister() throws Exception {
 
-        String testDtoJson = mapToJson(getSurveyBaseDto());
+        String testDtoJson = mapToJson(setSurveyBaseDto());
 
         MockHttpServletResponse mvcResult = mockMvc
                 .perform(post("/survey/surveyRegister")
@@ -57,40 +59,56 @@ public class SurveyTest extends BaseTests {
 
     }
 
-    private SurveyBaseDto getSurveyBaseDto() {
+    private SurveyBaseDto setSurveyBaseDto() {
         SurveyBaseDto surveySearch = new SurveyBaseDto();
         surveySearch.setTitle("Test");
-        surveySearch.setState(SurveyState.OPEN);
+        surveySearch.setStateType(SurveyState.OPEN);
+        surveySearch.setDisplayYn(YesNoType.Y);
+        surveySearch.setUseYn(YesNoType.Y);
+        List<SurveyQuestionDto> questList = setQuestionDto();
+        surveySearch.setQuestions(questList);
+        return surveySearch;
+    }
 
+    private List<SurveyQuestionDto> setQuestionDto() {
         List<SurveyQuestionDto> questList = new ArrayList<>();
 
         IntStream.range(0,2).forEach(i->{
             SurveyQuestionDto questionDto = new SurveyQuestionDto();
+            questionDto.setDisplayYn(YesNoType.Y);
+            questionDto.setUseYn(YesNoType.Y);
+            questionDto.setQuestionType(QuestionType.SINGLE_CHOICE);
+
             if(i == 0){
                 questionDto.setQuestionTitle("test가 쉽습니까?");
             }else{
                 questionDto.setQuestionTitle("test가 어렵습니까?");
             }
-            questionDto.setQuestionType(QuestionType.SINGLE);
 
-            List<SurveyAnswerDto> answerList = new ArrayList<>();
-                IntStream.range(0,2).forEach(j->{
-                    SurveyAnswerDto answerDto = new SurveyAnswerDto();
-
-                    if(j == 0){
-                        answerDto.setAnswerTile("YES");
-                    }else{
-                        answerDto.setAnswerTile("NO");
-                    }
-                    answerList.add(answerDto);
-                });
+            List<SurveyAnswerDto> answerList = setSurveyAnswer();
 
             questionDto.setAnswers(answerList);
             questList.add(questionDto);
         });
 
-        surveySearch.setQuestions(questList);
-        return surveySearch;
+        return questList;
+    }
+
+    private List<SurveyAnswerDto> setSurveyAnswer() {
+        List<SurveyAnswerDto> answerList = new ArrayList<>();
+        IntStream.range(0,2).forEach(j->{
+            SurveyAnswerDto answerDto = new SurveyAnswerDto();
+            answerDto.setDisplayYn(YesNoType.Y);
+            answerDto.setUseYn(YesNoType.Y);
+
+            if(j == 0){
+                answerDto.setAnswerContent("YES");
+            }else{
+                answerDto.setAnswerContent("NO");
+            }
+            answerList.add(answerDto);
+        });
+        return answerList;
     }
 
     @Test
@@ -108,9 +126,9 @@ public class SurveyTest extends BaseTests {
                 .andReturn().getResponse();
 
         String content = mvcResult.getContentAsString();
-        Response resultDto = mapFromJson(content, Response.class);
-
-        //assertThat(resultDto.getContext().get("data"), is(notNullValue()));
+        JSONObject parseObj = new JSONObject(content);
+        JSONArray returnObj = parseObj.getJSONObject("context").getJSONArray("data");
+        assertThat(returnObj.length(), greaterThanOrEqualTo(0));
     }
 
     @Test
@@ -126,13 +144,17 @@ public class SurveyTest extends BaseTests {
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$.returnMessage").value("success"))
                 .andExpect(jsonPath("$.returnCode").value("200"))
+                //.andExpect(jsonPath("$.context.data.id").value("1"))
                 .andReturn().getResponse();
 
         String content = mvcResult.getContentAsString();
         Response resultDto = mapFromJson(content, Response.class);
 
         assertThat(resultDto.getContext().get("data"), is(notNullValue()));
-        assertThat(resultDto.getContext().get("resultId"), is(equalTo(1)));
+
+        JSONObject parseObj = new JSONObject(content);
+        JSONObject returnObj = parseObj.getJSONObject("context").getJSONObject("data");
+        assertThat(returnObj.get("id"), is(1));
 
     }
 

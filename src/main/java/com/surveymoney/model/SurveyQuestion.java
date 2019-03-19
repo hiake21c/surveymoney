@@ -3,6 +3,7 @@ package com.surveymoney.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.surveymoney.enumulation.QuestionType;
+import com.surveymoney.enumulation.YesNoType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,9 +29,19 @@ public class SurveyQuestion extends BaseModel{
     @Enumerated(EnumType.STRING)
     private QuestionType questionType;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private YesNoType useYn;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private YesNoType displayYn;
+
     @ManyToOne
     @JsonBackReference
     private SurveyBase surveyBase;
+
+
 
     @OneToMany(mappedBy = "surveyQuestion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
