@@ -17,15 +17,17 @@ import java.util.List;
 @Getter
 @Setter
 public class SurveyBaseDto {
+    private  Long id;
 
     @NotNull(message = "title is null")
     private String title;
 
-    @NotNull
     private SurveyState stateType;
 
+    @NotNull
     private YesNoType useYn;
 
+    @NotNull
     private YesNoType displayYn;
 
     private List<SurveyQuestionDto> Questions;

@@ -31,7 +31,7 @@ public class SurveyController {
      * @return Response
      */
 
-    @PostMapping(value = "/surveyRegister", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Response> surveyRegister(@RequestBody @Valid SurveyBaseDto param, Errors error){
 
         Response response = new Response();
@@ -72,7 +72,7 @@ public class SurveyController {
      * @param baseId
      * @return Response
      */
-    @GetMapping(value="/surveyDetail", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value="/detail", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Response> getSurveyDetail(@RequestParam @Valid Long baseId){
 
         Response response = new Response();
@@ -102,7 +102,7 @@ public class SurveyController {
      * 설문조사 목록 조회
      * @return Response
      */
-    @GetMapping(value = "/surveyList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public  ResponseEntity<Response> getSurveyList(){
         Response response = new Response();
 
@@ -116,6 +116,26 @@ public class SurveyController {
         return ResponseEntity.ok(response);
 
     }
+
+    @PutMapping(value = "/update",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Response> putUpdate(@RequestBody @Valid SurveyBaseDto param, Errors error){
+        Response response = new Response();
+
+        if(error.hasErrors()){
+            response.setReturnCode(300);
+            response.setReturnMessage("필수값이 누락되었습니다.");
+            return ResponseEntity.ok(response);
+        }
+
+        try{
+
+        }catch(Exception e){
+
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
 
     /**
      * 설문조사를 삭제한다.

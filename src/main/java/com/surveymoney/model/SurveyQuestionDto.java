@@ -15,14 +15,18 @@ import java.util.List;
 @Setter
 public class SurveyQuestionDto {
 
+    private  Long id;
+
     @NotNull
     private String questionTitle;
 
     @NotNull
     private QuestionType questionType;
 
+    @NotNull
     private YesNoType useYn;
 
+    @NotNull
     private YesNoType displayYn;
 
     @NotNull

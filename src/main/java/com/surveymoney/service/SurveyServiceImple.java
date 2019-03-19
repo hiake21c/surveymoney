@@ -39,6 +39,7 @@ public class SurveyServiceImple implements SurveyService {
         List<SurveyQuestion> surveyQuestionList = new ArrayList<>();
 
         if(surveyParam.getQuestions() != null){
+
             surveyParam.getQuestions().forEach(questParam->{
 
                 SurveyQuestion surveyQuestion = setSurveyQuestion(questParam);

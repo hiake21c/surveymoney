@@ -12,6 +12,8 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class SurveyAnswerDto {
 
+    private  Long id;
+
     @NotNull
     private String answerContent;
 
