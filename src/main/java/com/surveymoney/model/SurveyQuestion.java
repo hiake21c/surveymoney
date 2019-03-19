@@ -29,11 +29,11 @@ public class SurveyQuestion extends BaseModel{
     @Enumerated(EnumType.STRING)
     private QuestionType questionType;
 
-    @Column(nullable = false, columnDefinition ="Y")
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private YesNoType useYn;
 
-    @Column(nullable = false, columnDefinition ="Y")
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private YesNoType displayYn;
 
