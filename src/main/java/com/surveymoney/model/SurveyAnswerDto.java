@@ -28,4 +28,6 @@ public class SurveyAnswerDto {
     private YesNoType useYn;
 
     private YesNoType displayYn;
+
+    private String contentAnswer;
 }

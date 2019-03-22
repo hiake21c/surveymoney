@@ -36,6 +36,7 @@ public class SurveyAnswer extends BaseModel {
 
     private  int scale;
 
+    private String contentAnswer;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
