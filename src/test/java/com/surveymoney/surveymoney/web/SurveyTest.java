@@ -158,7 +158,7 @@ public class SurveyTest extends BaseTests {
     @Test
     @TestDscription(description = "설문조사를 수정한다.")
     public void surveyUpdate() throws Exception{
-        String testDtoJson = mapToJson(setSurveyBaseDto());
+        String testDtoJson = mapToJson(setUpdateSurveyBaseDto());
 
         MockHttpServletResponse mvcResult = mockMvc
                 .perform(put("/survey/update")
@@ -170,7 +170,69 @@ public class SurveyTest extends BaseTests {
                 .andExpect(jsonPath("$.returnMessage").value("success"))
                 .andExpect(jsonPath("$.returnCode").value("200"))
                 .andReturn().getResponse();
+    }
 
+
+
+    private SurveyBaseDto setUpdateSurveyBaseDto() {
+        SurveyBaseDto surveySearch = new SurveyBaseDto();
+        surveySearch.setId(1L);
+        surveySearch.setTitle("Test1");
+        surveySearch.setStateType(SurveyState.OPEN);
+        surveySearch.setDisplayYn(YesNoType.Y);
+        surveySearch.setUseYn(YesNoType.N);
+        List<SurveyQuestionDto> questList = setUpdateSurveyQuestion();
+        surveySearch.setQuestions(questList);
+        return surveySearch;
+    }
+
+    private List<SurveyQuestionDto> setUpdateSurveyQuestion(){
+        List<SurveyQuestionDto> questList = new ArrayList<>();
+
+        IntStream.range(0,2).forEach(i->{
+            SurveyQuestionDto questionDto = new SurveyQuestionDto();
+            questionDto.setId(1L);
+            questionDto.setDisplayYn(YesNoType.Y);
+            questionDto.setUseYn(YesNoType.Y);
+            List<SurveyAnswerDto> answerList = new ArrayList<>();
+
+            if(i == 0){
+                questionDto.setQuestionTitle("test가 쉽습니까?");
+                questionDto.setQuestionType(QuestionType.MULTIPLE_CHOICE);
+                IntStream.range(0,2).forEach(j->{
+                    SurveyAnswerDto answerDto = new SurveyAnswerDto();
+                    answerDto.setDisplayYn(YesNoType.Y);
+                    answerDto.setUseYn(YesNoType.Y);
+
+                    if(j == 0){
+                        answerDto.setAnswerContent("YES");
+                    }else{
+                        answerDto.setAnswerContent("NO");
+                    }
+                    answerList.add(answerDto);
+                });
+            }else{
+                questionDto.setQuestionTitle("개발에 대해서 어떻게 생각 하십니까?");
+                questionDto.setQuestionType(QuestionType.MULTIPLE_TEXT_BOX);
+                IntStream.range(0,2).forEach(j->{
+                    SurveyAnswerDto answerDto = new SurveyAnswerDto();
+                    answerDto.setDisplayYn(YesNoType.Y);
+                    answerDto.setUseYn(YesNoType.Y);
+
+                    if(j == 0){
+                        answerDto.setContentAnswer("힘듭니다.");
+                    }else{
+                        answerDto.setContentAnswer("할만합니다.");
+                    }
+                    answerList.add(answerDto);
+                });
+            }
+
+            questionDto.setAnswers(answerList);
+            questList.add(questionDto);
+        });
+
+        return questList;
 
     }
 
