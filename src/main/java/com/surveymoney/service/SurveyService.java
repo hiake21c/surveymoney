@@ -5,6 +5,7 @@ import com.surveymoney.model.SurveyBaseDto;
 import com.surveymoney.model.SurveyQuestion;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SurveyService  {
 
@@ -17,4 +18,6 @@ public interface SurveyService  {
     void deleteSurveyBase(Long baseId);
 
     List<SurveyQuestion> deleteQuestion(Long baseId, Long qstId);
+
+    SurveyBase updateSurvey(SurveyBaseDto param);
 }

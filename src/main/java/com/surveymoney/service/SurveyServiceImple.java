@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -37,6 +39,7 @@ public class SurveyServiceImple implements SurveyService {
 
         SurveyBase surveyBase = setSurveyBase(surveyParam);
         List<SurveyQuestion> surveyQuestionList = new ArrayList<>();
+
 
         if(surveyParam.getQuestions() != null){
 
@@ -68,11 +71,85 @@ public class SurveyServiceImple implements SurveyService {
         return resultObj.getId();
     }
 
+
+    /**
+     * 상세 조회
+     * @param id
+     * @return
+     */
+    @Override
+    @Transactional
+    public SurveyBase surveyDetail(Long id){
+
+        SurveyBase base = surveyBaseRepository.getOne(id);
+        return base;
+    }
+
+    /**
+     * 모든 설문 조사 조회
+     * @return
+     */
+    @Override
+    public List<SurveyBase> surveyAllList(){
+
+        List<SurveyBase> baseList = surveyBaseRepository.findAll();
+        return baseList;
+    }
+
+    @Override
+    public SurveyBase updateSurvey(SurveyBaseDto param) {
+
+        SurveyBase baseDto = surveyBaseRepository.getOne(param.getId());
+
+        baseDto.setUseYn(param.getUseYn());
+        baseDto.setDisplayYn(param.getDisplayYn());
+        baseDto.setStateType(param.getStateType());
+        baseDto.setTitle(param.getTitle());
+        baseDto.setModifyDate(LocalDateTime.now());
+
+        param.getQuestions().forEach(quest ->{
+            SurveyQuestion question = surveyQuestionRepository.getOne(quest.getId());
+            
+        });
+        return baseDto;
+    }
+
+
+    /**
+     * 설문조사 삭제
+     * @param baseId
+     */
+    @Override
+    public void deleteSurveyBase(Long baseId) {
+
+        surveyBaseRepository.deleteById(baseId);
+    }
+
+    @Override
+    public List<SurveyQuestion> deleteQuestion(Long baseId, Long qstId) {
+        SurveyBase surveyBase = surveyBaseRepository.getOne(baseId);
+
+        List<SurveyQuestion> surveyQuestionList = new ArrayList<>();
+        surveyBase.getSurveyQuestionList().forEach(question->{
+            SurveyQuestion surveyQuestion = surveyQuestionRepository.getOne(qstId);
+
+            if(surveyQuestion != null){
+            }
+
+        });
+        return surveyBase.getSurveyQuestionList();
+
+    }
+
     private SurveyAnswer setSurveyAnswer(SurveyAnswerDto ans) {
         SurveyAnswer surveyAnswer = new  SurveyAnswer();
         surveyAnswer.setAnswerContent(ans.getAnswerContent());
         surveyAnswer.setDisplayYn(ans.getDisplayYn());
         surveyAnswer.setUseYn(ans.getUseYn());
+        surveyAnswer.setAnswerCount(ans.getAnswerCount());
+        surveyAnswer.setScale(ans.getScale());
+        surveyAnswer.setShapeType(ans.getShapeType());
+        surveyAnswer.setAnswerCheck(ans.getAnswerCheck());
         surveyAnswer.setCreateId(1L);
         surveyAnswer.setCreateDate(LocalDateTime.now());
         surveyAnswer.setModifyDate(LocalDateTime.now());
@@ -107,55 +184,7 @@ public class SurveyServiceImple implements SurveyService {
         return surveyBase;
     }
 
-    /**
-     * 상세 조회
-     * @param id
-     * @return
-     */
-    @Override
-    @Transactional
-    public SurveyBase surveyDetail(Long id){
 
-        SurveyBase base = surveyBaseRepository.getOne(id);
-        return base;
-    }
-
-    /**
-     * 모든 설문 조사 조회
-     * @return
-     */
-    @Override
-    public List<SurveyBase> surveyAllList(){
-
-        List<SurveyBase> baseList = surveyBaseRepository.findAll();
-        return baseList;
-    }
-
-    /**
-     * 설문조사 삭제
-     * @param baseId
-     */
-    @Override
-    public void deleteSurveyBase(Long baseId) {
-
-        surveyBaseRepository.deleteById(baseId);
-    }
-
-    @Override
-    public List<SurveyQuestion> deleteQuestion(Long baseId, Long qstId) {
-        SurveyBase surveyBase = surveyBaseRepository.getOne(baseId);
-
-        List<SurveyQuestion> surveyQuestionList = new ArrayList<>();
-        surveyBase.getSurveyQuestionList().forEach(question->{
-            SurveyQuestion surveyQuestion = surveyQuestionRepository.getOne(qstId);
-
-            if(surveyQuestion != null){
-            }
-
-        });
-        return surveyBase.getSurveyQuestionList();
-
-    }
 
 
 }
