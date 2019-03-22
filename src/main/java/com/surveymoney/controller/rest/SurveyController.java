@@ -117,6 +117,12 @@ public class SurveyController {
 
     }
 
+    /**
+     * 설문조사 수정
+     * @param param
+     * @param error
+     * @return
+     */
     @PutMapping(value = "/update",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Response> putUpdate(@RequestBody @Valid SurveyBaseDto param, Errors error){
         Response response = new Response();
@@ -129,6 +135,8 @@ public class SurveyController {
 
         try{
 
+            SurveyBase result = surveyService.updateSurvey(param);
+            response.putContext("data",result);
         }catch(Exception e){
 
         }
