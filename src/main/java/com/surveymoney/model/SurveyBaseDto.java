@@ -17,11 +17,13 @@ import java.util.List;
 @Getter
 @Setter
 public class SurveyBaseDto {
+
     private  Long id;
 
     @NotNull(message = "title is null")
     private String title;
 
+    @NotNull
     private SurveyState stateType;
 
     @NotNull
