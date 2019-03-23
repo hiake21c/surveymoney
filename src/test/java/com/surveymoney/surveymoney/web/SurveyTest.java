@@ -177,7 +177,7 @@ public class SurveyTest extends BaseTests {
     private SurveyBaseDto setUpdateSurveyBaseDto() {
         SurveyBaseDto surveySearch = new SurveyBaseDto();
         surveySearch.setId(1L);
-        surveySearch.setTitle("Test1");
+        surveySearch.setTitle("Test1 수정합니다.");
         surveySearch.setStateType(SurveyState.OPEN);
         surveySearch.setDisplayYn(YesNoType.Y);
         surveySearch.setUseYn(YesNoType.N);
