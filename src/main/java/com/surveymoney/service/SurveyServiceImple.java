@@ -37,7 +37,7 @@ public class SurveyServiceImple implements SurveyService {
     @Transactional
     public Long surveyRegister(SurveyBaseDto surveyParam){
 
-        SurveyBase surveyBase = setSurveyBase(surveyParam);
+        SurveyBase surveyBase = setSurveyBase(new SurveyBase(),surveyParam);
         List<SurveyQuestion> surveyQuestionList = new ArrayList<>();
 
 
@@ -96,21 +96,15 @@ public class SurveyServiceImple implements SurveyService {
         return baseList;
     }
 
+    /**
+     * 설문 정보 수정
+     * @param param
+     * @return
+     */
     @Override
     public SurveyBase updateSurvey(SurveyBaseDto param) {
 
-        SurveyBase baseDto = surveyBaseRepository.getOne(param.getId());
-
-        baseDto.setUseYn(param.getUseYn());
-        baseDto.setDisplayYn(param.getDisplayYn());
-        baseDto.setStateType(param.getStateType());
-        baseDto.setTitle(param.getTitle());
-        baseDto.setModifyDate(LocalDateTime.now());
-
-        param.getQuestions().forEach(quest ->{
-            SurveyQuestion question = surveyQuestionRepository.getOne(quest.getId());
-            
-        });
+        SurveyBase baseDto = setSurveyBase(surveyBaseRepository.getOne(param.getId()), param);
         return baseDto;
     }
 
@@ -150,6 +144,7 @@ public class SurveyServiceImple implements SurveyService {
         surveyAnswer.setScale(ans.getScale());
         surveyAnswer.setShapeType(ans.getShapeType());
         surveyAnswer.setAnswerCheck(ans.getAnswerCheck());
+        //TODO : 수정, 등록 정보 공통으로 해야 함. 수정, 등록일떄 다이나믹하게 값을 셋팅을 해야 함.
         surveyAnswer.setCreateId(1L);
         surveyAnswer.setCreateDate(LocalDateTime.now());
         surveyAnswer.setModifyDate(LocalDateTime.now());
@@ -164,6 +159,7 @@ public class SurveyServiceImple implements SurveyService {
         surveyQuestion.setQuestionTitle(questParam.getQuestionTitle());
         surveyQuestion.setDisplayYn(questParam.getDisplayYn());
         surveyQuestion.setUseYn(questParam.getUseYn());
+        //TODO : 수정, 등록 정보 공통으로 해야 함. 수정, 등록일떄 다이나믹하게 값을 셋팅을 해야 함.
         surveyQuestion.setCreateId(1L);
         surveyQuestion.setCreateDate(LocalDateTime.now());
         surveyQuestion.setModifyDate(LocalDateTime.now());
@@ -171,12 +167,12 @@ public class SurveyServiceImple implements SurveyService {
         return surveyQuestion;
     }
 
-    private SurveyBase setSurveyBase(SurveyBaseDto surveyParam) {
-        SurveyBase surveyBase = new SurveyBase();
+    private SurveyBase setSurveyBase(SurveyBase surveyBase, SurveyBaseDto surveyParam) {
         surveyBase.setTitle(surveyParam.getTitle());
         surveyBase.setStateType(surveyParam.getStateType());
         surveyBase.setDisplayYn(surveyParam.getDisplayYn());
         surveyBase.setUseYn(surveyParam.getUseYn());
+        //TODO : 수정, 등록 정보 공통으로 해야 함. 수정, 등록일떄 다이나믹하게 값을 셋팅을 해야 함.
         surveyBase.setCreateId(1L);
         surveyBase.setCreateDate(LocalDateTime.now());
         surveyBase.setModifyDate(LocalDateTime.now());
