@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,14 +44,14 @@ public class SurveyServiceImple implements SurveyService {
 
             surveyParam.getQuestions().forEach(questParam->{
 
-                SurveyQuestion surveyQuestion = setSurveyQuestion(questParam);
+                SurveyQuestion surveyQuestion = setSurveyQuestion(new SurveyQuestion(), questParam);
                 surveyQuestion.setSurveyBase(surveyBase);
 
                 if(questParam.getAnswers() != null){
                     List<SurveyAnswer> surveyAnswerArrayList = new ArrayList<>();
 
                     questParam.getAnswers().forEach(ans->{
-                        SurveyAnswer surveyAnswer = setSurveyAnswer(ans);
+                        SurveyAnswer surveyAnswer = setSurveyAnswer(new SurveyAnswer(),ans);
                         surveyAnswer.setSurveyQuestion(surveyQuestion);
                         surveyAnswerArrayList.add(surveyAnswer);
                     });
@@ -102,10 +101,51 @@ public class SurveyServiceImple implements SurveyService {
      * @return
      */
     @Override
-    public SurveyBase updateSurvey(SurveyBaseDto param) {
+    public void updateSurvey(SurveyBaseDto param) {
+        SurveyBase surveyBase = surveyBaseRepository.getOne(param.getId());
+        //SurveyBase setSurveyBase =setSurveyBase(surveyBase, param);
+        surveyBaseRepository.save(setSurveyBase(surveyBase, param));
+    }
 
-        SurveyBase baseDto = setSurveyBase(surveyBaseRepository.getOne(param.getId()), param);
-        return baseDto;
+    @Override
+    public void updateQuestion(Long baseId,List<SurveyQuestionDto> param) {
+
+        Optional<SurveyBase> base = surveyBaseRepository.findById(baseId);
+        base.ifPresent( baseDetail ->{
+
+            Optional<List<SurveyQuestionDto>> paramQuestion = Optional.ofNullable(param);
+
+            paramQuestion.ifPresent( detailQuestion->{
+
+                List<SurveyQuestion> editQuestion = new ArrayList<>();
+                detailQuestion.forEach( questionDto->{
+                    SurveyQuestion question = surveyQuestionRepository.getOne(questionDto.getId());
+
+//                    Optional<List<SurveyAnswerDto>> paramAnswer = Optional.ofNullable(questionDto.getAnswers());
+//                    paramAnswer.ifPresent( detailAnswer->{
+//
+//                        List<SurveyAnswer> editAnswer = new ArrayList<>();
+//                        detailAnswer.forEach( answerDto->{
+//
+//                            SurveyAnswer answer = surveyAnswerRepository.getOne(answerDto.getId());
+//
+//                            surveyAnswerRepository.save( setSurveyAnswer(answer,answerDto));
+//                            editAnswer.add(answer);
+//
+//                        });
+//                        question.setSurveyAnswerList(editAnswer);
+//                    });
+
+
+                    surveyQuestionRepository.save(setSurveyQuestion(question, questionDto));
+                    editQuestion.add(question);
+                });
+
+                baseDetail.setSurveyQuestionList(editQuestion);
+            });
+
+        });
+
     }
 
 
@@ -135,8 +175,7 @@ public class SurveyServiceImple implements SurveyService {
 
     }
 
-    private SurveyAnswer setSurveyAnswer(SurveyAnswerDto ans) {
-        SurveyAnswer surveyAnswer = new  SurveyAnswer();
+    private SurveyAnswer setSurveyAnswer(SurveyAnswer surveyAnswer, SurveyAnswerDto ans) {
         surveyAnswer.setAnswerContent(ans.getAnswerContent());
         surveyAnswer.setDisplayYn(ans.getDisplayYn());
         surveyAnswer.setUseYn(ans.getUseYn());
@@ -152,9 +191,7 @@ public class SurveyServiceImple implements SurveyService {
         return surveyAnswer;
     }
 
-    private SurveyQuestion setSurveyQuestion(SurveyQuestionDto questParam) {
-        SurveyQuestion surveyQuestion = new SurveyQuestion();
-
+    private SurveyQuestion setSurveyQuestion(SurveyQuestion surveyQuestion,SurveyQuestionDto questParam) {
         surveyQuestion.setQuestionType(questParam.getQuestionType());
         surveyQuestion.setQuestionTitle(questParam.getQuestionTitle());
         surveyQuestion.setDisplayYn(questParam.getDisplayYn());

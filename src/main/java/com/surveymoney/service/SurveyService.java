@@ -3,9 +3,9 @@ package com.surveymoney.service;
 import com.surveymoney.model.SurveyBase;
 import com.surveymoney.model.SurveyBaseDto;
 import com.surveymoney.model.SurveyQuestion;
+import com.surveymoney.model.SurveyQuestionDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface SurveyService  {
 
@@ -15,9 +15,12 @@ public interface SurveyService  {
 
     List<SurveyBase> surveyAllList();
 
+    void updateQuestion(Long baseId, List<SurveyQuestionDto> param);
+
     void deleteSurveyBase(Long baseId);
 
     List<SurveyQuestion> deleteQuestion(Long baseId, Long qstId);
 
-    SurveyBase updateSurvey(SurveyBaseDto param);
+    void updateSurvey(SurveyBaseDto param);
+
 }

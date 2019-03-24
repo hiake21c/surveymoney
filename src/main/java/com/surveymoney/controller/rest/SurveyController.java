@@ -4,6 +4,7 @@ import com.surveymoney.bean.Response;
 import com.surveymoney.model.SurveyBase;
 import com.surveymoney.model.SurveyBaseDto;
 import com.surveymoney.model.SurveyQuestion;
+import com.surveymoney.model.SurveyQuestionDto;
 import com.surveymoney.service.SurveyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/survey")
 @Slf4j
-public class SurveyController {
+public class SurveyController{
 
     @Autowired
     SurveyService surveyService;
@@ -123,7 +124,7 @@ public class SurveyController {
      * @param error
      * @return
      */
-    @PutMapping(value = "/update",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "/update/base",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Response> putUpdate(@RequestBody @Valid SurveyBaseDto param, Errors error){
         Response response = new Response();
 
@@ -134,13 +135,34 @@ public class SurveyController {
         }
 
         try{
-
-            SurveyBase result = surveyService.updateSurvey(param);
-            response.putContext("data",result);
+            surveyService.updateSurvey(param);
         }catch(Exception e){
-
+            response.setReturnCode(700);
+            response.putContext("error",e.getMessage());
+            response.setReturnMessage("시스템오류 입니다.");
         }
 
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping(value="/update/{baseId}/question", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Response> putQuestion(@RequestBody @Valid List<SurveyQuestionDto> param
+            , @PathVariable Long baseId,  Errors errors){
+        Response response = new Response();
+
+        if(errors.hasErrors()){
+            response.setReturnCode(300);
+            response.setReturnMessage("필수값이 누락되었습니다. ");
+            return ResponseEntity.ok(response);
+        }
+
+        try{
+            surveyService.updateQuestion(baseId,param);
+        }catch (Exception e){
+            response.setReturnCode(700);
+            response.putContext("error",e.getMessage());
+            response.setReturnMessage("시스템오류 입니다.");
+        }
         return ResponseEntity.ok(response);
     }
 
