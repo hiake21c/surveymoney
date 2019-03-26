@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -107,40 +108,45 @@ public class SurveyServiceImple implements SurveyService {
         surveyBaseRepository.save(setSurveyBase(surveyBase, param));
     }
 
+    /**
+     * 질문 수정, 답변 수정
+     * @param baseId
+     * @param param
+     */
     @Override
     public void updateQuestion(Long baseId,List<SurveyQuestionDto> param) {
 
-        Optional<SurveyBase> base = surveyBaseRepository.findById(baseId);
-        base.ifPresent( baseDetail ->{
+        Optional<List<SurveyQuestionDto>> optionParam = Optional.ofNullable(param);
+        optionParam.ifPresent( paramQuestion-> {
 
-            Optional<List<SurveyQuestionDto>> paramQuestion = Optional.ofNullable(param);
+            //설문 기본 정보를 조회해 온다.
+            Optional<SurveyBase> optionBase = surveyBaseRepository.findById(baseId);
+            optionBase.ifPresent(baseDetail -> {
 
-            paramQuestion.ifPresent( detailQuestion->{
-
+                //질문정보에 변경된 정보를 영속성 시킨다.
                 List<SurveyQuestion> editQuestion = new ArrayList<>();
-                detailQuestion.forEach( questionDto->{
+                paramQuestion.forEach(questionDto -> {
                     SurveyQuestion question = surveyQuestionRepository.getOne(questionDto.getId());
 
-//                    Optional<List<SurveyAnswerDto>> paramAnswer = Optional.ofNullable(questionDto.getAnswers());
-//                    paramAnswer.ifPresent( detailAnswer->{
-//
-//                        List<SurveyAnswer> editAnswer = new ArrayList<>();
-//                        detailAnswer.forEach( answerDto->{
-//
-//                            SurveyAnswer answer = surveyAnswerRepository.getOne(answerDto.getId());
-//
-//                            surveyAnswerRepository.save( setSurveyAnswer(answer,answerDto));
-//                            editAnswer.add(answer);
-//
-//                        });
-//                        question.setSurveyAnswerList(editAnswer);
-//                    });
+                    Optional<List<SurveyAnswerDto>> optionAnswer = Optional.ofNullable(questionDto.getAnswers());
+                    optionAnswer.ifPresent(detailAnswer -> {
 
+                        List<SurveyAnswer> editAnswer = new ArrayList<>();
+                        detailAnswer.forEach(answerDto -> {
 
+                            SurveyAnswer result2 = question.getSurveyAnswerList().stream()
+                                    .filter(x -> x.getId() == answerDto.getId())
+                                    .findAny()
+                                    .orElse(null);
+                            editAnswer.add(setSurveyAnswer(result2,answerDto));
+
+                        });
+                        question.setSurveyAnswerList(editAnswer);
+                    });
                     surveyQuestionRepository.save(setSurveyQuestion(question, questionDto));
                     editQuestion.add(question);
-                });
 
+                });
                 baseDetail.setSurveyQuestionList(editQuestion);
             });
 
@@ -176,13 +182,13 @@ public class SurveyServiceImple implements SurveyService {
     }
 
     private SurveyAnswer setSurveyAnswer(SurveyAnswer surveyAnswer, SurveyAnswerDto ans) {
-        surveyAnswer.setAnswerContent(ans.getAnswerContent());
-        surveyAnswer.setDisplayYn(ans.getDisplayYn());
-        surveyAnswer.setUseYn(ans.getUseYn());
-        surveyAnswer.setAnswerCount(ans.getAnswerCount());
-        surveyAnswer.setScale(ans.getScale());
-        surveyAnswer.setShapeType(ans.getShapeType());
-        surveyAnswer.setAnswerCheck(ans.getAnswerCheck());
+        surveyAnswer.setAnswerContent(Optional.ofNullable(ans.getAnswerContent()).orElse(""));
+        surveyAnswer.setDisplayYn(Optional.ofNullable(ans.getDisplayYn()).orElse(surveyAnswer.getDisplayYn()));
+        surveyAnswer.setUseYn(Optional.ofNullable(ans.getUseYn()).orElse(surveyAnswer.getUseYn()));
+        surveyAnswer.setAnswerCount(Optional.ofNullable(ans.getAnswerCount()).orElse(surveyAnswer.getAnswerCount()));
+        surveyAnswer.setScale(Optional.ofNullable(ans.getScale()).orElse(surveyAnswer.getScale()));
+        surveyAnswer.setShapeType(Optional.ofNullable(ans.getShapeType()).orElse(surveyAnswer.getShapeType()));
+        surveyAnswer.setAnswerCheck(Optional.ofNullable(ans.getAnswerCheck()).orElse(surveyAnswer.getAnswerCheck()));
         //TODO : 수정, 등록 정보 공통으로 해야 함. 수정, 등록일떄 다이나믹하게 값을 셋팅을 해야 함.
         surveyAnswer.setCreateId(1L);
         surveyAnswer.setCreateDate(LocalDateTime.now());
@@ -192,10 +198,10 @@ public class SurveyServiceImple implements SurveyService {
     }
 
     private SurveyQuestion setSurveyQuestion(SurveyQuestion surveyQuestion,SurveyQuestionDto questParam) {
-        surveyQuestion.setQuestionType(questParam.getQuestionType());
-        surveyQuestion.setQuestionTitle(questParam.getQuestionTitle());
-        surveyQuestion.setDisplayYn(questParam.getDisplayYn());
-        surveyQuestion.setUseYn(questParam.getUseYn());
+        surveyQuestion.setQuestionType(Optional.ofNullable(questParam.getQuestionType()).orElse(surveyQuestion.getQuestionType()));
+        surveyQuestion.setQuestionTitle(Optional.ofNullable(questParam.getQuestionTitle()).orElse(surveyQuestion.getQuestionTitle()));
+        surveyQuestion.setDisplayYn(Optional.ofNullable(questParam.getDisplayYn()).orElse(surveyQuestion.getDisplayYn()));
+        surveyQuestion.setUseYn(Optional.ofNullable(questParam.getUseYn()).orElse(surveyQuestion.getUseYn()));
         //TODO : 수정, 등록 정보 공통으로 해야 함. 수정, 등록일떄 다이나믹하게 값을 셋팅을 해야 함.
         surveyQuestion.setCreateId(1L);
         surveyQuestion.setCreateDate(LocalDateTime.now());
@@ -205,10 +211,10 @@ public class SurveyServiceImple implements SurveyService {
     }
 
     private SurveyBase setSurveyBase(SurveyBase surveyBase, SurveyBaseDto surveyParam) {
-        surveyBase.setTitle(surveyParam.getTitle());
-        surveyBase.setStateType(surveyParam.getStateType());
-        surveyBase.setDisplayYn(surveyParam.getDisplayYn());
-        surveyBase.setUseYn(surveyParam.getUseYn());
+        surveyBase.setTitle(Optional.ofNullable(surveyParam.getTitle()).orElse(surveyBase.getTitle()));
+        surveyBase.setStateType(Optional.ofNullable(surveyParam.getStateType()).orElse(surveyBase.getStateType()));
+        surveyBase.setDisplayYn(Optional.ofNullable(surveyParam.getDisplayYn()).orElse(surveyBase.getDisplayYn()));
+        surveyBase.setUseYn(Optional.ofNullable(surveyParam.getUseYn()).orElse(surveyBase.getUseYn()));
         //TODO : 수정, 등록 정보 공통으로 해야 함. 수정, 등록일떄 다이나믹하게 값을 셋팅을 해야 함.
         surveyBase.setCreateId(1L);
         surveyBase.setCreateDate(LocalDateTime.now());

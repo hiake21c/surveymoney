@@ -17,6 +17,8 @@ public class SurveyQuestionDto {
 
     private  Long id;
 
+    private Long baseId;
+
     @NotNull
     private String questionTitle;
 
