@@ -226,8 +226,10 @@ public class SurveyTest extends BaseTests {
                     answerDto.setUseYn(YesNoType.Y);
 
                     if(j == 0){
+                        answerDto.setId(1L);
                         answerDto.setAnswerContent("YES");
                     }else{
+                        answerDto.setId(2L);
                         answerDto.setAnswerContent("NO");
                     }
                     answerList.add(answerDto);
@@ -242,8 +244,10 @@ public class SurveyTest extends BaseTests {
                     answerDto.setUseYn(YesNoType.Y);
 
                     if(j == 0){
+                        answerDto.setId(3L);
                         answerDto.setContentAnswer("힘듭니다.");
                     }else{
+                        answerDto.setId(4L);
                         answerDto.setContentAnswer("할만합니다.");
                     }
                     answerList.add(answerDto);
