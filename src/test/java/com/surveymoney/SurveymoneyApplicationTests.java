@@ -1,5 +1,6 @@
 package com.surveymoney;
 
+import org.apache.logging.log4j.core.config.properties.PropertiesConfigurationFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

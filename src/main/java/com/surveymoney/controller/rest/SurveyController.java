@@ -1,6 +1,5 @@
 package com.surveymoney.controller.rest;
 
-import com.surveymoney.SurveymoneyApplication;
 import com.surveymoney.bean.Response;
 import com.surveymoney.model.SurveyBase;
 import com.surveymoney.model.SurveyBaseDto;
