@@ -32,7 +32,6 @@ public class SurveyController{
 
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Response> surveyRegister(@RequestBody @Valid SurveyBaseDto param, Errors error){
-        logger.info("=== SurveyController.surveyRegister === ");
         Response response = new Response();
 
         if(error.hasErrors()){
@@ -227,6 +226,33 @@ public class SurveyController{
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 질문 사용여부 수정
+     * @param baseId
+     * @param useYn
+     * @return
+     */
+    @PostMapping(value = "/base/{baseId}/useYn", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Response> updateBaseUseYn( @PathVariable Long baseId,
+                                                    @RequestParam String useYn){
+        Response response = new Response();
+
+        if(useYn == null){
+            response.setReturnCode(300);
+            response.setReturnMessage("필수 useYn 파라미터가 누락되었습니다.");
+            return ResponseEntity.ok(response);
+        }
+
+        if(baseId == null){
+            response.setReturnCode(300);
+            response.setReturnMessage("필수 baseId 파라미터가 누락되었습니다.");
+            return ResponseEntity.ok(response);
+        }
+
+
+
+        return ResponseEntity.ok(response);
+    }
 
 
 
