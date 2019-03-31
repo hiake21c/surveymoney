@@ -3,6 +3,7 @@ package com.surveymoney.surveymoney.web;
 import com.surveymoney.bean.Response;
 import com.surveymoney.common.BaseTests;
 import com.surveymoney.common.TestDscription;
+import com.surveymoney.controller.rest.SurveyController;
 import com.surveymoney.enumulation.QuestionType;
 import com.surveymoney.enumulation.SurveyState;
 import com.surveymoney.enumulation.YesNoType;
@@ -11,6 +12,8 @@ import com.surveymoney.model.SurveyBase;
 import com.surveymoney.model.SurveyBaseDto;
 import com.surveymoney.model.SurveyQuestionDto;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.FixMethodOrder;
@@ -34,12 +37,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @FixMethodOrder(MethodSorters.JVM)
-@Slf4j
 public class SurveyTest extends BaseTests {
+    private static Logger logger = LogManager.getLogger(SurveyTest.class);
 
     @Test
     @TestDscription(description = "설문조사를 신규 등록한다.")
     public void surveyRegister() throws Exception {
+
+        logger.debug("설문조사를 신규 등록한다.");
 
         String testDtoJson = mapToJson(setSurveyBaseDto());
 

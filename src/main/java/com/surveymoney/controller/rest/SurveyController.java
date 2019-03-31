@@ -1,12 +1,14 @@
 package com.surveymoney.controller.rest;
 
+import com.surveymoney.SurveymoneyApplication;
 import com.surveymoney.bean.Response;
 import com.surveymoney.model.SurveyBase;
 import com.surveymoney.model.SurveyBaseDto;
 import com.surveymoney.model.SurveyQuestion;
 import com.surveymoney.model.SurveyQuestionDto;
 import com.surveymoney.service.SurveyService;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +20,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/survey")
-@Slf4j
 public class SurveyController{
-
+    private static Logger logger = LogManager.getLogger(SurveyController.class);
     @Autowired
     SurveyService surveyService;
-
-
 
     /**
      * Survey 등록
@@ -34,7 +33,7 @@ public class SurveyController{
 
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Response> surveyRegister(@RequestBody @Valid SurveyBaseDto param, Errors error){
-
+        logger.info("=== SurveyController.surveyRegister === ");
         Response response = new Response();
 
         if(error.hasErrors()){
