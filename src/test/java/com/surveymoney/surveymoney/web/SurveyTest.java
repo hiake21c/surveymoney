@@ -261,6 +261,7 @@ public class SurveyTest extends BaseTests {
 
     }
 
+
     
 
 //    @Test
@@ -285,6 +286,24 @@ public class SurveyTest extends BaseTests {
 //    }
 
     @Test
+    @TestDscription(description = "설문지를 사용여부를 수정한.")
+    public void surveyBaseUseYn() throws Exception{
+        MockHttpServletResponse mvcResult = mockMvc
+                .perform(post("/survey/base/1/useYn")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .param("useYn", "Y")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.returnCode").value("200"))
+                .andReturn().getResponse();
+
+        //JSONObject returnObj = new JSONObject(mvcResult.getContentAsString()).getJSONObject("context").getJSONObject("data");
+        //assertThat(returnObj.get("id"), is(1));
+    }
+
+    @Test
     @TestDscription(description = "기본 설문조사를 삭제 한다.")
     public void surveyBaseDelete() throws Exception{
         MockHttpServletResponse mvcResult = mockMvc
@@ -301,5 +320,7 @@ public class SurveyTest extends BaseTests {
         String content = mvcResult.getContentAsString();
 
     }
+
+
 
 }
