@@ -102,10 +102,11 @@ public class SurveyServiceImple implements SurveyService {
      * @return
      */
     @Override
-    public void updateSurvey(SurveyBaseDto param) {
+    public SurveyBase updateSurvey(SurveyBaseDto param) {
         SurveyBase surveyBase = surveyBaseRepository.getOne(param.getId());
         //SurveyBase setSurveyBase =setSurveyBase(surveyBase, param);
         surveyBaseRepository.save(setSurveyBase(surveyBase, param));
+        return surveyBase;
     }
 
     @Override

@@ -27,7 +27,7 @@ public class SurveyController{
     SurveyService surveyService;
 
     /**
-     * Survey 등록
+     * Survey 신규등록
      * @param param
      * @return Response
      */
@@ -134,7 +134,8 @@ public class SurveyController{
         }
 
         try{
-            surveyService.updateSurvey(param);
+            SurveyBase surveyBase = surveyService.updateSurvey(param);
+            response.putContext("data",surveyBase);
         }catch(Exception e){
             response.setReturnCode(700);
             response.putContext("error",e.getMessage());
@@ -144,6 +145,13 @@ public class SurveyController{
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 질문 수정
+     * @param param
+     * @param baseId
+     * @param errors
+     * @return
+     */
     @PutMapping(value="/update/{baseId}/question", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Response> putQuestion(@RequestBody @Valid List<SurveyQuestionDto> param
             , @PathVariable Long baseId,  Errors errors){

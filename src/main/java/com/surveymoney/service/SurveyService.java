@@ -21,7 +21,7 @@ public interface SurveyService  {
 
     List<SurveyQuestion> deleteQuestion(Long baseId, Long qstId);
 
-    void updateSurvey(SurveyBaseDto param);
+    SurveyBase updateSurvey(SurveyBaseDto param);
 
     SurveyBase updateBaseUseYn(Long baseId, String useYn);
 }
