@@ -20,7 +20,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/survey")
 public class SurveyController{
+
     private static Logger logger = LogManager.getLogger(SurveyController.class);
+
     @Autowired
     SurveyService surveyService;
 
@@ -249,7 +251,16 @@ public class SurveyController{
             return ResponseEntity.ok(response);
         }
 
+        try{
 
+            SurveyBase surveyBase = surveyService.updateBaseUseYn(baseId, useYn);
+            response.putContext("data",surveyBase);
+        }catch (Exception e){
+            response.setReturnCode(700);
+            response.putContext("error",e.getMessage());
+            response.setReturnMessage("시스템오류 입니다.");
+
+        }
 
         return ResponseEntity.ok(response);
     }

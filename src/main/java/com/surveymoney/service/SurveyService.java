@@ -23,4 +23,5 @@ public interface SurveyService  {
 
     void updateSurvey(SurveyBaseDto param);
 
+    SurveyBase updateBaseUseYn(Long baseId, String useYn);
 }

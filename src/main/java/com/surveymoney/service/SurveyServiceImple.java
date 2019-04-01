@@ -1,5 +1,6 @@
 package com.surveymoney.service;
 
+import com.surveymoney.enumulation.YesNoType;
 import com.surveymoney.model.*;
 import com.surveymoney.repository.SurveyAnswerRepository;
 import com.surveymoney.repository.SurveyBaseRepository;
@@ -107,6 +108,17 @@ public class SurveyServiceImple implements SurveyService {
         surveyBaseRepository.save(setSurveyBase(surveyBase, param));
     }
 
+    @Override
+    public SurveyBase updateBaseUseYn(Long baseId, String useYn) {
+
+        SurveyBase surveyBase = surveyBaseRepository.getOne(baseId);
+
+        surveyBase.setUseYn(YesNoType.valueOf(useYn));
+        surveyBaseRepository.save(surveyBase);
+
+        return surveyBase;
+    }
+
     /**
      * 질문 수정, 답변 수정
      * @param baseId
@@ -163,6 +175,7 @@ public class SurveyServiceImple implements SurveyService {
 
         surveyBaseRepository.deleteById(baseId);
     }
+
 
     @Override
     public List<SurveyQuestion> deleteQuestion(Long baseId, Long qstId) {
