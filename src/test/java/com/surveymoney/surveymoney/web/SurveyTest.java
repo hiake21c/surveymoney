@@ -183,6 +183,7 @@ public class SurveyTest extends BaseTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(status().is(200))
+                .andExpect(jsonPath("$.returnMessage").value("success"))
                 .andExpect(jsonPath("$.returnCode").value("200"))
                 .andReturn().getResponse();
 
@@ -286,21 +287,24 @@ public class SurveyTest extends BaseTests {
 //    }
 
     @Test
-    @TestDscription(description = "설문지를 사용여부를 수정한.")
+    @TestDscription(description = "설문지를 사용여부를 수정한다")
     public void surveyBaseUseYn() throws Exception{
         MockHttpServletResponse mvcResult = mockMvc
                 .perform(post("/survey/base/1/useYn")
                         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                        .param("useYn", "Y")
+                        .param("useYn", "N")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(status().is(200))
+                .andExpect(jsonPath("$.returnMessage").value("success"))
                 .andExpect(jsonPath("$.returnCode").value("200"))
                 .andReturn().getResponse();
 
-        //JSONObject returnObj = new JSONObject(mvcResult.getContentAsString()).getJSONObject("context").getJSONObject("data");
-        //assertThat(returnObj.get("id"), is(1));
+        JSONObject returnObj = new JSONObject(mvcResult.getContentAsString()).getJSONObject("context").getJSONObject("data");
+        assertThat(returnObj.get("id"), is(1));
+        assertThat(returnObj.get("useYn"), is("N"));
+
     }
 
     @Test
