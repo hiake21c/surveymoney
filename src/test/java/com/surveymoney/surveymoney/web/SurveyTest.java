@@ -55,8 +55,11 @@ public class SurveyTest extends BaseTests {
 
         String content = mvcResult.getContentAsString();
         Response resultDto = mapFromJson(content, Response.class);
-
         assertThat(resultDto.getContext(), is(notNullValue()));
+
+        JSONObject returnObj = new JSONObject(content).getJSONObject("context");
+        assertThat(returnObj.get("id"), is(notNullValue()));
+        assertThat(returnObj.get("id"), is(1));
 
     }
 
