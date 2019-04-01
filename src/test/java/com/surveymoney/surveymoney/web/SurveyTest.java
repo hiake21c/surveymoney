@@ -130,6 +130,13 @@ public class SurveyTest extends BaseTests {
                 .andExpect(jsonPath("$.returnMessage").value("success"))
                 .andExpect(jsonPath("$.returnCode").value("200"))
                 .andReturn().getResponse();
+
+        JSONObject returnObj = new JSONObject(mvcResult.getContentAsString()).getJSONObject("context").getJSONObject("data");
+        assertThat(returnObj.get("title"), is(equalTo("Test1 수정합니다.")));
+        assertThat(returnObj.get("stateType"), is(SurveyState.OPEN.name()));
+        assertThat(returnObj.get("displayYn"), is(YesNoType.Y.name()));
+        assertThat(returnObj.get("useYn"), is(YesNoType.N.name()));
+
     }
 
     @Test
@@ -167,11 +174,11 @@ public class SurveyTest extends BaseTests {
                 //.andExpect(jsonPath("$.context.data.id").value("1"))
                 .andReturn().getResponse();
 
-//        String content = mvcResult.getContentAsString();
-//        Response resultDto = mapFromJson(content, Response.class);
-//        assertThat(resultDto.getContext().get("data"), is(notNullValue()));
+        String content = mvcResult.getContentAsString();
+        Response resultDto = mapFromJson(content, Response.class);
+        assertThat(resultDto.getContext().get("data"), is(notNullValue()));
 
-        JSONObject returnObj = new JSONObject(mvcResult.getContentAsString()).getJSONObject("context").getJSONObject("data");
+        JSONObject returnObj = new JSONObject(content).getJSONObject("context").getJSONObject("data");
         assertThat(returnObj.get("id"), is(1));
     }
 
