@@ -163,6 +163,12 @@ public class SurveyController{
             return ResponseEntity.ok(response);
         }
 
+        if(baseId == null){
+            response.setReturnCode(300);
+            response.setReturnMessage("파라미터값이 누락되었습니다. ");
+            return ResponseEntity.ok(response);
+        }
+
         try{
             surveyService.updateQuestion(baseId,param);
         }catch (Exception e){
@@ -172,6 +178,8 @@ public class SurveyController{
         }
         return ResponseEntity.ok(response);
     }
+
+
 
 
     /**
@@ -237,7 +245,7 @@ public class SurveyController{
     }
 
     /**
-     * 질문 사용여부 수정
+     * 설문 사용여부 수정
      * @param baseId
      * @param useYn
      * @return
@@ -263,6 +271,41 @@ public class SurveyController{
 
             SurveyBase surveyBase = surveyService.updateBaseUseYn(baseId, useYn);
             response.putContext("data",surveyBase);
+        }catch (Exception e){
+            response.setReturnCode(700);
+            response.putContext("error",e.getMessage());
+            response.setReturnMessage("시스템오류 입니다.");
+
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 질문 사용여부를 수정한다.
+     * @param qstId
+     * @param useYn
+     * @return
+     */
+    @PostMapping(value = "/question/{qstId}/useYn", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Response> updateQuestionUseYn( @PathVariable Long qstId,
+                                                     @RequestParam String useYn){
+        Response response = new Response();
+
+        if(useYn == null){
+            response.setReturnCode(300);
+            response.setReturnMessage("필수 useYn 파라미터가 누락되었습니다.");
+            return ResponseEntity.ok(response);
+        }
+
+        if(qstId == null){
+            response.setReturnCode(300);
+            response.setReturnMessage("필수 qstId 파라미터가 누락되었습니다.");
+            return ResponseEntity.ok(response);
+        }
+
+        try{
+            surveyService.updateQusetionUseYn(qstId, useYn);
         }catch (Exception e){
             response.setReturnCode(700);
             response.putContext("error",e.getMessage());

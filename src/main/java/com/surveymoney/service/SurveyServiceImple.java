@@ -1,11 +1,14 @@
 package com.surveymoney.service;
 
+import com.surveymoney.controller.rest.SurveyController;
 import com.surveymoney.enumulation.YesNoType;
 import com.surveymoney.model.*;
 import com.surveymoney.repository.SurveyAnswerRepository;
 import com.surveymoney.repository.SurveyBaseRepository;
 import com.surveymoney.repository.SurveyQuestionRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +21,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class SurveyServiceImple implements SurveyService {
+    private static Logger logger = LogManager.getLogger(SurveyServiceImple.class);
 
     @Autowired
     SurveyBaseRepository surveyBaseRepository;
@@ -109,15 +113,35 @@ public class SurveyServiceImple implements SurveyService {
         return surveyBase;
     }
 
+    /**
+     * 설문지 사용여부 수정
+     * @param baseId
+     * @param useYn
+     * @return
+     */
     @Override
     public SurveyBase updateBaseUseYn(Long baseId, String useYn) {
 
         SurveyBase surveyBase = surveyBaseRepository.getOne(baseId);
-
         surveyBase.setUseYn(YesNoType.valueOf(useYn));
         surveyBaseRepository.save(surveyBase);
 
         return surveyBase;
+    }
+
+    /**
+     * 질문 사용여부 수정
+     * @param qstId
+     * @param useYn
+     * @return
+     */
+    @Override
+    public void updateQusetionUseYn(Long qstId, String useYn) {
+        SurveyQuestion surveyQuestion = surveyQuestionRepository.getOne(qstId);
+        surveyQuestion.setUseYn(YesNoType.valueOf(useYn));
+        surveyQuestionRepository.save(surveyQuestion);
+
+        return surveyQuestion;
     }
 
     /**
@@ -173,7 +197,6 @@ public class SurveyServiceImple implements SurveyService {
      */
     @Override
     public void deleteSurveyBase(Long baseId) {
-
         surveyBaseRepository.deleteById(baseId);
     }
 
