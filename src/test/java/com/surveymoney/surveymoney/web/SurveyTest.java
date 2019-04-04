@@ -314,7 +314,25 @@ public class SurveyTest extends BaseTests {
         JSONObject returnObj = new JSONObject(mvcResult.getContentAsString()).getJSONObject("context").getJSONObject("data");
         assertThat(returnObj.get("id"), is(1));
         assertThat(returnObj.get("useYn"), is("N"));
+    }
 
+    @Test
+    @TestDscription(description = "질문의 사용여부를 수정한다.")
+    public void surveyQuestionUseYn()throws Exception{
+        MockHttpServletResponse mvcResult = mockMvc
+                .perform(post("/survey/question/1/useYn")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .param("useYn", "N")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.returnMessage").value("success"))
+                .andExpect(jsonPath("$.returnCode").value("200"))
+                .andReturn().getResponse();
+        //JSONObject returnObj = new JSONObject(mvcResult.getContentAsString()).getJSONObject("context").getJSONObject("data");
+        //assertThat(returnObj.get("id"), is(1));
+        //assertThat(returnObj.get("useYn"), is("N"));
     }
 
     @Test
