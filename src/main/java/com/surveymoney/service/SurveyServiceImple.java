@@ -141,7 +141,6 @@ public class SurveyServiceImple implements SurveyService {
         surveyQuestion.setUseYn(YesNoType.valueOf(useYn));
         surveyQuestionRepository.save(surveyQuestion);
 
-        return surveyQuestion;
     }
 
     /**
