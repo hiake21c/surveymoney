@@ -336,6 +336,22 @@ public class SurveyTest extends BaseTests {
     }
 
     @Test
+    @TestDscription(description = "검색 기능")
+    public void surveySearch() throws Exception{
+        MockHttpServletResponse mvcResult = mockMvc
+                .perform(get("/survey/search")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .param("title", "test"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.returnMessage").value("success"))
+                .andExpect(jsonPath("$.returnCode").value("200"))
+                //.andExpect(jsonPath("$.context.data.id").value("1"))
+                .andReturn().getResponse();
+
+    }
+    @Test
     @TestDscription(description = "기본 설문조사를 삭제 한다.")
     public void surveyBaseDelete() throws Exception{
         MockHttpServletResponse mvcResult = mockMvc
