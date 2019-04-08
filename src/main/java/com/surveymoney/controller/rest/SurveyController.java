@@ -316,6 +316,19 @@ public class SurveyController{
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping(value = "search", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Response> surveySearch(@RequestParam @Valid String title){
+        Response response = new Response();
+
+        if(title == null){
+            response.setReturnCode(300);
+            response.setReturnMessage("필수값이 누락되었습니다. ");
+            return ResponseEntity.ok(response);
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
 
 
 }
