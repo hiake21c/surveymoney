@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 
 import static org.springframework.data.jpa.domain.Specification.where;
 
+
 @Getter
 @Setter
 @ToString
@@ -28,7 +29,7 @@ public class SurveyBaseSearch extends SearchSpecification<SurveyBase> {
 
     YesNoType useYn;
 
-    private SurveyState stateType;
+    SurveyState stateType;
 
     @Override
     public Specification<SurveyBase> toSpec() {
