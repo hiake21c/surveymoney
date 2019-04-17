@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -199,6 +200,14 @@ public class SurveyServiceImple implements SurveyService {
         surveyBaseRepository.deleteById(baseId);
     }
 
+    /**
+     * 질문 검색
+     * @return
+     */
+    @Override
+    public SurveyBase baseSearch(Specification<SurveyBase> search) {
+        return null;
+    }
 
     @Override
     public List<SurveyQuestion> deleteQuestion(Long baseId, Long qstId) {
@@ -213,7 +222,6 @@ public class SurveyServiceImple implements SurveyService {
 
         });
         return surveyBase.getSurveyQuestionList();
-
     }
 
     private SurveyAnswer setSurveyAnswer(SurveyAnswer surveyAnswer, SurveyAnswerDto ans) {
