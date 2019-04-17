@@ -4,6 +4,7 @@ import com.surveymoney.model.SurveyBase;
 import com.surveymoney.model.SurveyBaseDto;
 import com.surveymoney.model.SurveyQuestion;
 import com.surveymoney.model.SurveyQuestionDto;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
@@ -26,4 +27,7 @@ public interface SurveyService  {
     SurveyBase updateBaseUseYn(Long baseId, String useYn);
 
     void updateQusetionUseYn(Long qstId, String useYn);
+
+    SurveyBase BaseSearch(Specification<SurveyBase> search);
+
 }

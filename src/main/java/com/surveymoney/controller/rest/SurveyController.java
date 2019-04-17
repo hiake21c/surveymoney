@@ -1,10 +1,7 @@
 package com.surveymoney.controller.rest;
 
 import com.surveymoney.bean.Response;
-import com.surveymoney.model.SurveyBase;
-import com.surveymoney.model.SurveyBaseDto;
-import com.surveymoney.model.SurveyQuestion;
-import com.surveymoney.model.SurveyQuestionDto;
+import com.surveymoney.model.*;
 import com.surveymoney.service.SurveyService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -316,11 +313,16 @@ public class SurveyController{
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 검색
+     * @param search
+     * @return
+     */
     @GetMapping(value = "search", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response> surveySearch(@RequestParam @Valid String title){
+    public ResponseEntity<Response> surveySearch(@RequestParam @Valid SurveyBaseSearch search, Errors error){
         Response response = new Response();
 
-        if(title == null){
+        if(error.hasErrors()){
             response.setReturnCode(300);
             response.setReturnMessage("필수값이 누락되었습니다. ");
             return ResponseEntity.ok(response);

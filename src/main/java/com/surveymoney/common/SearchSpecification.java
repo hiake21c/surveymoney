@@ -12,13 +12,7 @@ public abstract class SearchSpecification<T> {
 
     public abstract Specification<T> toSpec();
 
-    public <X> //
-    Specification<T> isEqual(final SingularAttribute<? super T, X> e, final X target) {
-        return new Specification<T>() {
-            @Override
-            public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-                return builder.equal(root.get(e), target);
-            }
-        };
+    public <X> Specification<T> isEqual(final SingularAttribute<? super T, X> e, final X target) {
+        return (Specification<T>) (root, query, builder) -> builder.equal(root.get(e), target);
     }
 }
