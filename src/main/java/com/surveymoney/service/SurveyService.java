@@ -30,4 +30,5 @@ public interface SurveyService  {
 
     SurveyBase baseSearch(Specification<SurveyBase> search);
 
+
 }
