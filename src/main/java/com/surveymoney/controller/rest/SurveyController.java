@@ -329,7 +329,7 @@ public class SurveyController{
         }
 
         SurveyBase result =  surveyService.baseSearch(search.toSpec());
-
+        response.putContext("data",result);
         return ResponseEntity.ok(response);
     }
 

@@ -207,7 +207,8 @@ public class SurveyServiceImple implements SurveyService {
     @Override
     public SurveyBase baseSearch(Specification<SurveyBase> search) {
 
-        return null;
+        SurveyBase title = surveyBaseRepository.findAll(search);
+        return title;
     }
 
     @Override
@@ -219,6 +220,7 @@ public class SurveyServiceImple implements SurveyService {
             SurveyQuestion surveyQuestion = surveyQuestionRepository.getOne(qstId);
 
             if(surveyQuestion != null){
+
             }
 
         });
