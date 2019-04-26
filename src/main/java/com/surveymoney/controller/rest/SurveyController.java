@@ -319,7 +319,7 @@ public class SurveyController{
      * @return
      */
     @GetMapping(value = "search", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Response> surveySearch(@RequestParam @Valid SurveyBaseSearch search, Errors error){
+    public ResponseEntity<Response> surveySearch(@ModelAttribute @Valid SurveyBaseSearch search, Errors error){
         Response response = new Response();
 
         if(error.hasErrors()){
@@ -328,7 +328,7 @@ public class SurveyController{
             return ResponseEntity.ok(response);
         }
 
-        SurveyBase result =  surveyService.baseSearch(search.toSpec());
+        List<SurveyBase> result =  surveyService.baseSearch(search.toSpec());
         response.putContext("data",result);
         return ResponseEntity.ok(response);
     }

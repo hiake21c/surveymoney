@@ -28,7 +28,7 @@ public interface SurveyService  {
 
     void updateQusetionUseYn(Long qstId, String useYn);
 
-    SurveyBase baseSearch(Specification<SurveyBase> search);
+    List<SurveyBase> baseSearch(Specification<SurveyBase> search);
 
 
 }
