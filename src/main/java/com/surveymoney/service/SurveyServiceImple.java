@@ -9,6 +9,7 @@ import com.surveymoney.repository.SurveyQuestionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -73,6 +74,7 @@ public class SurveyServiceImple implements SurveyService {
         }
 
         SurveyBase resultObj = surveyBaseRepository.save(surveyBase);
+
 
         return resultObj.getId();
     }

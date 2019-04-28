@@ -2,6 +2,7 @@ package com.surveymoney.controller.rest;
 
 import com.surveymoney.bean.Response;
 import com.surveymoney.model.*;
+import com.surveymoney.service.SurveyBaseService;
 import com.surveymoney.service.SurveyService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,6 +23,9 @@ public class SurveyController{
 
     @Autowired
     SurveyService surveyService;
+
+    @Autowired
+    SurveyBaseService surveyBaseService;
 
     /**
      * Survey 신규등록
@@ -45,7 +49,7 @@ public class SurveyController{
 
         try{
 
-            Long resultId =  surveyService.surveyRegister(param);
+            Long resultId =  surveyBaseService.surveyRegister(param);
             if(resultId == null){
                 response.setReturnCode(600);
                 response.setReturnMessage("등록이 실패 하였습니다.");
