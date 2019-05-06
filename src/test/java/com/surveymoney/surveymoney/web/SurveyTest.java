@@ -350,6 +350,12 @@ public class SurveyTest extends BaseTests {
                 //.andExpect(jsonPath("$.context.data.id").value("1"))
                 .andReturn().getResponse();
 
+        JSONArray returnObj = new JSONObject(mvcResult.getContentAsString()).getJSONObject("context").getJSONArray("data");
+
+        System.out.println("=======>"+returnObj.length());
+//        assertThat(returnObj.get("id"), is(1));
+//        assertThat(returnObj.get("useYn"), is("N"));
+
     }
     @Test
     @TestDscription(description = "기본 설문조사를 삭제 한다.")

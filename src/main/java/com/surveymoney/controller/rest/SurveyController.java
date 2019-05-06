@@ -2,8 +2,7 @@ package com.surveymoney.controller.rest;
 
 import com.surveymoney.bean.Response;
 import com.surveymoney.model.*;
-import com.surveymoney.service.SurveyBaseService;
-import com.surveymoney.service.SurveyService;
+import com.surveymoney.service.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,19 @@ public class SurveyController{
     SurveyService surveyService;
 
     @Autowired
-    SurveyBaseService surveyBaseService;
+    SurveyRegisterService surveyRegister;
+
+    @Autowired
+    SurveySelectService surveySelect;
+
+    @Autowired
+    SurveyUpdateService surveyUpdate;
+
+    @Autowired
+    SurveyDeleteService surveyDelete;
+
+    @Autowired
+    SurveySearchService surveySearch;
 
     /**
      * Survey 신규등록
@@ -49,7 +60,7 @@ public class SurveyController{
 
         try{
 
-            Long resultId =  surveyBaseService.surveyRegister(param);
+            Long resultId =  surveyRegister.surveyRegister(param);
             if(resultId == null){
                 response.setReturnCode(600);
                 response.setReturnMessage("등록이 실패 하였습니다.");
@@ -86,7 +97,7 @@ public class SurveyController{
 
         try{
 
-            SurveyBase resultObj =  surveyService.surveyDetail(baseId);
+            SurveyBase resultObj =  surveySelect.surveyDetail(baseId);
             response.putContext("data",resultObj);
 
         }catch(Exception e){
@@ -107,7 +118,7 @@ public class SurveyController{
     public  ResponseEntity<Response> getSurveyList(){
         Response response = new Response();
 
-        List<SurveyBase> resultList = surveyService.surveyAllList();
+        List<SurveyBase> resultList = surveySelect.surveyAllList();
 
         if(resultList.size() <=0){
             response.setReturnMessage("조회한 목록이 없습니다.");
@@ -135,7 +146,7 @@ public class SurveyController{
         }
 
         try{
-            SurveyBase surveyBase = surveyService.updateSurvey(param);
+            SurveyBase surveyBase = surveyUpdate.updateSurvey(param);
             response.putContext("data",surveyBase);
         }catch(Exception e){
             response.setReturnCode(700);
@@ -171,7 +182,7 @@ public class SurveyController{
         }
 
         try{
-            surveyService.updateQuestion(baseId,param);
+            surveyUpdate.updateQuestion(baseId,param);
         }catch (Exception e){
             response.setReturnCode(700);
             response.putContext("error",e.getMessage());
@@ -199,7 +210,7 @@ public class SurveyController{
         }
 
         try{
-            surveyService.deleteSurveyBase(baseId);
+            surveyDelete.deleteSurveyBase(baseId);
 
         }catch(Exception e){
 
@@ -234,7 +245,7 @@ public class SurveyController{
         }
 
         try{
-            List<SurveyQuestion> result =  surveyService.deleteQuestion(baseId, qstId);
+            List<SurveyQuestion> result =  surveyDelete.deleteQuestion(baseId, qstId);
             response.putContext("data",result);
         }catch (Exception e){
             response.setReturnCode(700);
@@ -270,7 +281,7 @@ public class SurveyController{
 
         try{
 
-            SurveyBase surveyBase = surveyService.updateBaseUseYn(baseId, useYn);
+            SurveyBase surveyBase = surveyUpdate.updateBaseUseYn(baseId, useYn);
             response.putContext("data",surveyBase);
         }catch (Exception e){
             response.setReturnCode(700);
@@ -306,7 +317,7 @@ public class SurveyController{
         }
 
         try{
-            surveyService.updateQusetionUseYn(qstId, useYn);
+            surveyUpdate.updateQusetionUseYn(qstId, useYn);
         }catch (Exception e){
             response.setReturnCode(700);
             response.putContext("error",e.getMessage());
@@ -332,7 +343,7 @@ public class SurveyController{
             return ResponseEntity.ok(response);
         }
 
-        List<SurveyBase> result =  surveyService.baseSearch(search.toSpec());
+        List<SurveyBase> result =  surveySearch.baseSearch(search.toSpec());
         response.putContext("data",result);
         return ResponseEntity.ok(response);
     }
