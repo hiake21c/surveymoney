@@ -20,29 +20,34 @@ public class SurveyAnswer extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name="answer_content", nullable = false)
     private String answerContent;
 
-    @Column(columnDefinition="int default 0")
+    @Column(name="answer_count", columnDefinition="int default 0")
 //    @ColumnDefault("0")
     private int answerCount;
 
+    @Column(name="answer_check")
     private String answerCheck;
 
     @Enumerated(EnumType.STRING)
+    @Column(name="shape_type")
     private AnswerShapeType shapeType;
 
+    @Column(name="scale")
     private  int scale;
 
+    @Column(name="content_answer")
     private String contentAnswer;
 
-    @Column(nullable = false)
+    @Column(name="use_yn", nullable = false)
     @Enumerated(EnumType.STRING)
     private YesNoType useYn;
 
-    @Column(nullable = false)
+    @Column(name="display_yn", nullable = false)
     @Enumerated(EnumType.STRING)
     private YesNoType displayYn;
 

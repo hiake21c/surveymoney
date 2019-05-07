@@ -20,20 +20,21 @@ public class SurveyQuestion extends BaseModel{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name="question_title", nullable = false)
     private String questionTitle;
 
-    @Column(nullable = false)
+    @Column(name="question_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private QuestionType questionType;
 
-    @Column(nullable = false)
+    @Column(name="use_yn", nullable = false)
     @Enumerated(EnumType.STRING)
     private YesNoType useYn;
 
-    @Column(nullable = false)
+    @Column(name="display_yn", nullable = false)
     @Enumerated(EnumType.STRING)
     private YesNoType displayYn;
 

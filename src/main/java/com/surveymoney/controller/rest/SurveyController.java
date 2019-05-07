@@ -21,9 +21,6 @@ public class SurveyController{
     private static Logger logger = LogManager.getLogger(SurveyController.class);
 
     @Autowired
-    SurveyService surveyService;
-
-    @Autowired
     SurveyRegisterService surveyRegister;
 
     @Autowired

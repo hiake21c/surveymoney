@@ -21,20 +21,21 @@ public class SurveyBase extends BaseModel{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name="title", nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(name="state_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private SurveyState stateType;
 
-    @Column(nullable = false)
+    @Column(name="use_yn", nullable = false)
     @Enumerated(EnumType.STRING)
     private YesNoType useYn;
 
-    @Column(nullable = false)
+    @Column(name="display_yn", nullable = false)
     @Enumerated(EnumType.STRING)
     private YesNoType displayYn;
 

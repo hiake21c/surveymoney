@@ -9,19 +9,20 @@ import javax.validation.constraints.Size;
 @Table(name = "sv_member")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Member extends BaseModel{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name="mem_name", nullable = false)
     @Size(min = 2, max = 10)
     private String memName;
 
-    @Column(nullable = false)
+    @Column(name="mem_id", nullable = false)
     @Size(min = 3, max = 15)
     private String memId;
 
